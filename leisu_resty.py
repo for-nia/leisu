@@ -1,6 +1,8 @@
 from flask import Flask,request
 from flask import jsonify
 from leisu import parse_stream
+import sys
+
 app=Flask(__name__)
 
 
@@ -19,4 +21,7 @@ def obtain_rul():
 def page_not_found(e):
     return jsonify(code=-20,result='not found')
 if __name__=='__main__':
-    app.run('localhost',8989)
+    port=8989
+    if len(sys.argv)>1:
+        port = sys.argv[1]
+    app.run('localhost',port)
