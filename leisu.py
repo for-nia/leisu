@@ -24,21 +24,29 @@ def parse_stream(url):
     #r=requests.get('http://api.leisu.com/api/livestream?sid=2292731&type=1',headers=headers)
     headers['Referer']=url
     r=requests.get(url,headers=headers)
-    # print r.text
     data=json.loads(r.text)
-    # print data
     if 'url' in data:
         url = data['url']
         if 'pc' in url:
-            print 'url:%s'%url['pc']
             return parse_line.get_rtmp(url['pc'])
 
 def get_html():
     streams=requests.get('https://live.leisu.com/')
     soup=BeautifulSoup(streams.text)
     for a in soup.select('a.icon-liveanimation'):
-        #parse_stream('http:'+a['href'])
-        parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1'%get_stream_id('http:'+a['href']))
+        stream_id = get_stream_id('http:'+a['href'])
+        home = get_home_name(a)
+        away = get_away_name(a)
+        url = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1'%stream_id)
+        if(url):
+            yield stream_id,url,home,away
+
+def get_home_name(a):
+    return a.parent.parent.parent.select('span.lab-team-home')[0].find('a').text
+
+
+def get_away_name(a):
+    return a.parent.parent.parent.select('span.lab-team-away')[0].find('a').text
 
 def get_stream_id(url):
     pattern=re.compile(r'http://live\.leisu\.com/stream-(\d+)')
