@@ -21,7 +21,6 @@ def get_rtmp(url):
     m=p.findall(r.text)
     # print r.text
     if m:
-        print m[0]
         return m[0]
 
 if __name__=='__main__':
