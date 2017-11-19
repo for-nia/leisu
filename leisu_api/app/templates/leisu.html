@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="referrer" content="no-referrer" />
+    <link href="{{ url_for('static',filename='css/leisu/common-wap-eb8621e619.css') }}" type="text/css"
+          rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/common.css?v=7') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/dialog-e303b22028.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/goalAnimation-b5591df240.css?v=1') }}" type="text/css"
+          rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/goalAnimation-b5591df240.css?v=1.1') }}" type="text/css"
+          rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/iconfont-edead75a95.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/loading-8a696de41a.css?v=2.4') }}" type="text/css"
+          rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/login-5bee9841ba.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/score-36c29f16a8.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/leisu/temporary-common.css') }}" type="text/css" rel="stylesheet">
+
+</head>
+<body>
+<div>
+    <div class="content layout-grid" id="list-time">
+        <div id="list" class="screen-view">
+            <div class="layout-grid-find" id="live">
+
+                <ul class="layout-grid-list">
+
+                    {% for match in matches %}
+                    <li class="list-item list-item-2302931 list-day-11-18 live" data-id="match.match_id" data-status="4"
+                        data-eventid="34"
+                        data-status-name="live" data-nowtime="{{match.begin_time}}" data-realtime="1511007459"
+                        data-eventlevels="1"
+                        data-halftime="45,15" data-lottery=",," data-asian-name="name-0.0" data-daxiao-name="name-1.5"
+                        data-asian=""
+                        data-odds="" data-daxiao="" data-home-icon="icon_team_default.png"
+                        data-away-icon="988dce1898dfda74527351927d9575b2.jpg" style="height:41px;">
+                        <div class="find-table layout-grid-tbody">
+                            <div class="clearfix-row">
+                                <i class="live-level live-1"></i>
+                                <span class="lab-check" onclick="matchCommon.listCheck.check($(this).find('.iconfont'))">
+                                    <span class="iconfont"></span>
+                                </span>
+                                <span class="lab-events">
+                                    <span class="event-icon" style="background-image:url(//cdn.leisu.com/eventlogo/086e2a4aff248001dd42cfc6bd246c03.png?imageView2/2/w/40);"></span>
+                                    <a class="event-name" href="//data.leisu.com/zuqiu-7130/" target="_blank">
+                                        <span class="display-i-b w-bar-100 line-h-14 v-a-m lang " data-lang="俄甲,俄甲,RUS D1">{{match.league_name}}</span></a>
+                                </span>
+                                <span class="lab-time"> {{match.begin_time}}</span>
+                                <span class="lab-lottery">
+                                    <span class="text-jc"></span>
+                                    <span class="text-bd"></span>
+                                    <span class="text-zc"></span>
+                                </span>
+                                <span class="lab-status skin-color-s start">
+                                    <span class="children">
+                                    <i class="iconfont icon-iconclock06 m-r-3 v-a-m"></i>
+                                    90
+                                    <span class="line-h-18">+</span>
+                                    </span>
+                                </span>
+                                <span class="float-left position-r w-300">
+                                    <span class="bd-line"></span>
+                                    <span class="lab-team-home">
+                                        <span class="display-i-b w-bar-100 line-h-16 v-a-m">
+                                            <span class="rank homerank hide"></span>
+                                            <span class="card homeyellowcards bgcolor-yellow4 hide">0</span>
+                                            <span class="card homeredcards bgcolor-red hide">0</span>
+                                            <a class="name color-666 lang " data-lang="印尼特选队,印尼特選隊,Indonesia XI" href="{{match.home_href}}" target="_blank">{{match.home_name}}</a>
+                                        </span>
+                                    </span>
+                                    <span class="lab-score color-red">
+                                        <span class="score">
+                                        <b class="color-red skin-color-s">{{match.home_score}}-{{match.away_score}}</b>
+                                        </span>
+                                    </span>
+                                    <span class="lab-team-away">
+                                        <span class="display-i-b w-bar-100 line-h-16 v-a-m">
+                                            <a class="name color-666 lang " data-lang="敘利亚U23,敘利亞U23,Syria U23" href="{{match.away_href}}" target="_blank">{{match.away_name}}</a>
+                                            <span class="card awayredcards bgcolor-red hide">0</span>
+                                            <span class="card awayyellowcards bgcolor-yellow4">1</span>
+                                            <span class="rank awayrank hide"></span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span class="float-right">
+                                    <span class="lab-half">  {{match.home_half}}-{{match.away_half}} </span>
+                                    <span class="lab-corner">
+                                        <span class="float-left m-l-10"><i class="iconfont icon-bf-icon-corner f-s-12 color-bbb m-r-5"></i>{{match.home_corner}}-{{match.away_corner}}</span>
+                                    </span>
+                                    <span class="lab-live">
+                                        <a class="btn-live-court" href="//live.leisu.com/detail-2302931" target="_blank"></a>
+                                    </span>
+                                    <span class="lab-sb">
+                                        <span class="bd-line"></span>
+                                        <span class="clearfix-row color-999 m-t-5 asian position-r">
+                                            <span class="lab-ratel">
+                                                <span class="exponent"><span class="text">{{match.yapei[0]}}</span>
+                                                    <i class="icon"></i>
+                                                </span></span>
+                                            <span class="lab-bet-odds">
+                                                <span class="exponent">
+                                                    <span class="text" data-num="{{match.yapei[1]}}">封</span>
+                                                    <i class="icon"></i>
+                                                </span>
+                                            </span>
+                                            <span class="lab-rater"> <span class="exponent">
+                                                <span class="text">{{match.yapei[2]}}</span>
+                                                <i class="icon"></i>
+                                            </span>
+                                            </span>
+                                        </span>
+                                        <span class="clearfix-row color-666 size m-t-2">
+                                            <span class="lab-ratel">
+                                                <span class="exponent">
+                                                    <span class="text">{{match.shy[0]}}</span>
+                                                    <i class="icon"></i>
+                                                </span>
+                                            </span>
+                                            <span class="lab-bet-odds">
+                                                <span class="exponent"><span class="text" data-num="{{match.shy[1]}}">封</span>
+                                                    <i class="icon"></i>
+                                                </span>
+                                            </span>
+                                            <span class="lab-rater">
+                                                <span class="exponent"><span class="text">{{match.shy[2]}}</span>
+                                                    <i class="icon"></i>
+                                                </span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <span class="lab-data">
+                                        <span class="link col-3 float-left">&nbsp;</span>
+                                        <a class="link col-3 float-left skin-color-h" href="//live.leisu.com/shujufenxi-2302931/" target="_blank">析</a>
+                                        <a class="link col-3 float-left skin-color-h" href="//live.leisu.com/3in1-2302931/" target="_blank">赔率</a>
+                                    </span>
+                                    <span class="lab-popularity">
+                                        <i class="iconfont icon-portrait"></i>
+                                        <span class="count">49</span>
+                                    </span>
+                                    <span class="lab-func">
+                                        <a class="link iconfont display-i-b v-a-t icon-topn skin-color-h" onclick="matchCommon.setTop(this)"></a>
+                                        <a class="iconfont follow icon-collectn skin-color-h" onclick="matchCommon.collection(this,2302931)"></a>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<span class="sb-tool-tip">
+    <span class="top">
+        <span class="left">大坂飞脚U23</span>
+        <span class="center">VS</span>
+        <span class="right">鹿儿岛联</span>
+    </span>
+    <span class="row f-s-14 line-h-36">
+        <span class="float-left w-166 m-l-62">亚</span>
+        <span class="float-left w-166">欧</span>
+        <span class="float-left w-166">大</span>
+    </span>
+    <span class="row f-s-12">
+        <span class="float-left w-62">初盘</span>
+        <span class="float-left w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.820</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col color-666">
+                <span class="exponent  null">
+                    <span class="text">受半/一</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.980</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+        <span class="float-left w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">3.750</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">3.750</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">1.720</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+        <span class="float-left  w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.820</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col color-666">
+                <span class="exponent  null">
+                    <span class="text">2.5/3</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.980</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+    </span>
+    <span class="row f-s-12  m-t-10">
+        <span class="float-left w-62">即时</span>
+        <span class="float-left w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.850</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col color-666">
+                <span class="exponent  null">
+                    <span class="text">受半/一</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.950</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+        <span class="float-left w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">4.000</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">3.600</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">1.750</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+        <span class="float-left  w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.900</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col color-666">
+                <span class="exponent  null">
+                    <span class="text">3</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.900</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+    </span>
+    <span class="row f-s-12 m-t-10">
+        <span class="float-left w-62">滚球</span>
+        <span class="float-left w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.775</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col color-666">
+                <span class="exponent  null">
+                    <span class="text">受平/半</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">1.025</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+        <span class="float-left w-166 color-999">
+            <span class="num-col">
+                <span class="exponent down null">
+                    <span class="text">6.500</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent down null">
+                    <span class="text">1.800</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent down null">
+                    <span class="text">2.625</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+        <span class="float-left  w-166 color-999">
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">0.775</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col color-666">
+                <span class="exponent  null">
+                    <span class="text">0.5</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+            <span class="num-col">
+                <span class="exponent  null">
+                    <span class="text">1.025</span>
+                    <i class="icon"></i>
+                </span>
+            </span>
+        </span>
+    </span>
+</span>-->
+</body>
+</html>

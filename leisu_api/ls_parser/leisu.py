@@ -1,10 +1,12 @@
 # coding utf8
 
-import requests
 import json
-from bs4 import BeautifulSoup
-import parse_line
 import re
+
+import requests
+from bs4 import BeautifulSoup
+
+import parse_line
 
 headers = {
     'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -16,7 +18,6 @@ headers = {
     'Pragma': 'no-cache',
     'Proxy-Connection': 'keep-alive',
     'Referer': 'http://live.leisu.com/stream-2292575',
-    #'Cookie':'Hm_lvt_c6b2d49f4c05828df5b14e5c672c37d2=1508848773; Hm_lpvt_c6b2d49f4c05828df5b14e5c672c37d2=1508848773',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 }
 

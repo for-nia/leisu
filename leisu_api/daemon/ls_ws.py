@@ -5,7 +5,7 @@ import time
 import requests
 import re
 import json
-
+urls=[]#['http://localhost:8989/leisu/ws']
 def get_uri():
     url='http://push.leisu.com/socket.io/1/?t=%d'%long(time.time()*100)
     res=requests.get(url)
@@ -19,9 +19,15 @@ def on_message(ws, message):
             "topic": "inplay",
             "timestamp": long(time.time()*100)
         }
-        ws.send(''.join(chr(i) for i in [51, 58, 58, 58, 00, 00, 00, 02, 28])+'connector.entryHandler.enter'+json.dumps(j))
+        print 'connect ....'
+        msg=''.join(chr(i) for i in [51, 58, 58, 58, 00, 00, 00, 02, 28])+'connector.entryHandler.enter'+json.dumps(j)
+        print msg
+        ws.send(msg)
     elif message == ''.join(chr(i) for i in [50, 58, 58]):
         ws.send(message)
+    else:
+        if message.startswith(''.join(chr(i) for i in [51, 58, 58,58])):push(message[4:],urls)
+
     print 'msg---->'+message.decode('utf-8').encode('gb18030')
 
 def on_error(ws, error):
@@ -30,6 +36,7 @@ def on_error(ws, error):
 
 def on_close(ws):
     print("### closed ###")
+    connect()
 
 def on_open(ws):
     # def run(*args):
@@ -45,6 +52,12 @@ def on_open(ws):
 def on_connect(ws):
     print 'connect'
 
+def connect():
+
+    pass
+
+def push(body,urls=[]):
+    for url in urls:requests.post(url,json=body)
 
 if __name__ == "__main__":
     websocket.enableTrace(True)

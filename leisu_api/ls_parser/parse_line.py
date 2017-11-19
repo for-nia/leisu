@@ -9,7 +9,6 @@ headers={
 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
 'Referer':'http://live.leisu.com/stream-2296625',
 'Accept-Encoding':'gzip, deflate',
-#'Cookie':'Hm_lvt_c6b2d49f4c05828df5b14e5c672c37d2=1508848773; Hm_lpvt_c6b2d49f4c05828df5b14e5c672c37d2=1508848773',
 'Accept-Language':'en,zh-CN;q=0.8,zh;q=0.6'
 }
 

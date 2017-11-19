@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">`
+    <title>Title</title>
+    <meta name="referrer" content="no-referrer" />
+    <link href="{{ url_for('static',filename='mainpage.css') }}" type="text/css" rel="stylesheet">
+
+</head>
+<body>
+<div class="match-list">
+
+    <div class="content">
+        <ul class="main">
+            {% for match in matches %}
+            <li class="item-container">
+                <a class="list-item flexBox">
+                    <div class="league">{{match.league_name}}</div>
+                    <div class="time">{{match.begin_time}}</div>
+                    <div class="game flexBox">
+                        <div class="team">
+                            <div class="team-avatar">
+                                <img alt="" src="{{match.home_head}}" lazy="loaded">
+                            </div>
+                            <div class="team-name">{{match.home_name}}</div>
+                        </div>
+                        <div class="score">{{ match.home_score if match.home_score else 0 }}-{{match.away_score if match.away_score else 0 }}</div>
+                        <div class="team">
+                            <div class="team-avatar">
+                                <img alt="" src="{{match.away_head}}" lazy="loaded">
+                            </div>
+                            <div class="team-name">{{match.away_name}}</div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</body>
+</html>
