@@ -5,7 +5,7 @@ import time
 import requests
 import re
 import json
-urls=[]#['http://localhost:8989/leisu/ws']
+urls=['http://localhost:8989/leisu/ws']
 def get_uri():
     url='http://push.leisu.com/socket.io/1/?t=%d'%long(time.time()*100)
     res=requests.get(url)

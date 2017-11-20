@@ -24,6 +24,11 @@ class Match(Document):
     away_corner=IntField()
     yapei=ListField()
     shy=ListField()
+    home_red_card=IntField()
+    home_yellow_card=IntField()
+    away_red_card=IntField()
+    away_yellow_card=IntField()
+    status=IntField()#1 未开始  2 已结束
 
 class Player(Document):
     player_id=StringField()

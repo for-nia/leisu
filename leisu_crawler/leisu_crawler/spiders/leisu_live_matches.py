@@ -45,6 +45,11 @@ class LeisuLiveMatches(scrapy.Spider):
             score_s=game.xpath('.//div/div/span[@class="float-left position-r w-300"]/span[@class="lab-score color-red"]/span/b/text()')
             score=score_s.extract()[0] if score_s else '0-0'
             [home_score,away_score]=[x if self.is_empty(x) else 0 for x in score.split('-')]
+            home_team=game.xpath('.//div/div/span[@class="float-left position-r w-300"]/span[@class="lab-team-home"]/span/span')
+            away_team=game.xpath('.//div/div/span[@class="float-left position-r w-300"]/span[@class="lab-team-away"]/span/span')
+            [home_yellow_card,home_red_card]=[home_team[1].xpath('.//text()').extract()[0] if len(home_team)>=2 else 0 ,home_team[2].xpath('.//text()').extract()[0] if len(home_team)>=3 else 0]
+            [away_red_card,away_yellow_card]=[away_team[0].xpath('.//text()').extract()[0] if len(away_team)>=1 else 0 ,away_team[1].xpath('.//text()').extract()[0] if len(away_team)>=2 else 0]
+            print [home_red_card,home_yellow_card,away_yellow_card,away_red_card]
             data={
                 'league_id':league_id,
                 'league_name':league_name,
@@ -55,7 +60,11 @@ class LeisuLiveMatches(scrapy.Spider):
                 'half':half,
                 'corner':corner,
                 'home_score':home_score,
-                'away_score':away_score
+                'away_score':away_score,
+                'home_red_card':home_red_card,
+                'home_yellow_card':home_yellow_card,
+                'away_red_card':away_red_card,
+                'away_yellow_card':away_yellow_card
                 }
 
 
@@ -114,6 +123,11 @@ class LeisuLiveMatches(scrapy.Spider):
         match.home_score=home_score
         match.away_score=away_score
         match_found=Match.objects(match_id=match_id)
+        match.home_red_card=response.meta.get('home_red_card')
+        match.home_yellow_card=response.meta.get('home_yellow_card')
+        match.away_red_card=response.meta.get('away_red_card')
+        match.away_yellow_card=response.meta.get('away_yellow_card')
+        match.status=1
         if match_found:match_found.update_one(home_score = home_score, away_score = away_score,
                                               home_half = home_half, away_half = away_half,
                                               home_corner = home_corner, away_corner = away_corner,

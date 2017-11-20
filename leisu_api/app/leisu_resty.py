@@ -28,14 +28,34 @@ def leisu_ws():
     #print request.headers
     r_json=request.get_json()
     data=json.loads(r_json)
+    #print data
     route=data['route']
     if route=='onScore':
-        body=data['data']
-        for l in body:
+        body=data['body']
+        for l in body['data']:
+            print l
             match_id=l[0]
             type=l[1]
-            match=Match.objects(match_id=match_id).first()
-            events=[match.home_score,match.home]
+            refresh_state(match_id,type,l[2],l[3])
+    return jsonify(code=0)
+
+def refresh_state(match_id,type,home_scores,away_scores):
+    status = 2 if type==8 else 1
+    Match.objects(match_id=match_id).update_one(status=status,
+                                                home_score=home_scores[0],
+                                                home_red_card=home_scores[2],
+                                                home_yellow_card=home_scores[3],
+                                                home_corner=home_scores[4],
+                                                away_score=away_scores[0],
+                                                away_red_card=away_scores[2],
+                                                away_yellow_card=away_scores[3],
+                                                away_corner=away_scores[4])
+
+@app.route('/matches')
+def matches():
+    page=request.args.get('page',0)
+    pageSize=request.args.get('pageSize',20)
+    match = Match.objects(status=1).order_by('begin_time', '+a').skip(page*pageSize).limit(pageSize)  #
 
 @app.route('/index.html')
 def index():
