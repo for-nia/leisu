@@ -7,10 +7,12 @@ from flask import render_template
 from leisu_api.ls_parser import leisu
 import json
 import datetime
+from flask_cors import CORS
 
 from leisu_crawler.leisu_crawler.items.Match import Match
 
 app=Flask(__name__)
+CORS(app)
 #app.config['JSON_AS_ASCII'] = False
 
 @app.route("/hello")
@@ -53,9 +55,10 @@ def refresh_state(match_id,type,home_scores,away_scores):
 
 @app.route('/matches')
 def matches():
-    page=request.args.get('page',0)
-    pageSize=request.args.get('pageSize',20)
-    match = Match.objects(status=1).order_by('begin_time', '+a').skip(page*pageSize).limit(pageSize)  #
+    page=int(request.args.get('page',0))
+    pageSize=int(request.args.get('pageSize',20))
+    matches = Match.objects(status=1).order_by('begin_time','a+').skip(page*pageSize).limit(pageSize)  #
+    return jsonify(code=0,result={'matches':[m.to_mongo() for m in matches]})
 
 @app.route('/index.html')
 def index():
