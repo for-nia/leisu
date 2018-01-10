@@ -100,4 +100,4 @@ if __name__=='__main__':
     port=8989
     if len(sys.argv)>1:
         port = sys.argv[1]
-    app.run('0.0.0.0',port)
+    app.run('0.0.0.0',port,threaded = True)
