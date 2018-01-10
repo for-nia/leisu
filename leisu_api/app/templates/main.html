@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="referrer" content="no-referrer" />
+    <link href="{{ url_for('static',filename='main.css') }}" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="center">
+            <div class="logo">天天看球</div>
+        </div>
+    </div>
+    <div class="content">
+        {% for match in matches %}
+        <div class="list">
+            <div class="game-name">
+                <div class="name">{{match.league_name}}</div>
+            </div>
+            <div class="time">12:20</div>
+            <div class="title">
+                <a class="team-palyer" href="/player.html" target="_blank"></a>
+                <div class="team">
+                    <div class="team-logo">
+                        <img src="{{match.home_head}}">
+                    </div>
+                    <span class="team-name">{{match.home_name}}</span>
+                </div>
+                <span class="line">-</span>
+                <div class="team">
+                    <div class="team-logo">
+                        <img src="{{match.away_head}}">
+                    </div>
+                    <span class="team-name">{{match.away_name}}</span>
+                </div>
+            </div>
+            <div class="line-info">
+                <a class="first" href="/main.html">线路</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

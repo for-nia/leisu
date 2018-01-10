@@ -1,0 +1,15 @@
+setup.py
+leisu_crawler/__init__.py
+leisu_crawler/items.py
+leisu_crawler/middlewares.py
+leisu_crawler/pipelines.py
+leisu_crawler/settings.py
+leisu_crawler/items/Match.py
+leisu_crawler/items/__init__.py
+leisu_crawler/spiders/__init__.py
+leisu_crawler/spiders/leisu_live_matches.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt

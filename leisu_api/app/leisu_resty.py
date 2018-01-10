@@ -11,7 +11,7 @@ from flask_cors import CORS
 
 from leisu_crawler.leisu_crawler.items.Match import Match
 
-app=Flask(__name__)
+app=Flask(__name__,static_folder='static')
 CORS(app)
 #app.config['JSON_AS_ASCII'] = False
 
@@ -64,7 +64,17 @@ def matches():
 def index():
     match=Match.objects().order_by('begin_time','+a').skip(10).limit(20)#begin_time__gt=datetime.datetime.now())
     return render_template('index.html',matches=match)
-    #return render_template('index.html',matches=[a for a in [{'home_name':'1111','away_name':'222'}]]);
+
+@app.route('/main.html')
+def main2():
+    match=Match.objects().order_by('begin_time','+a').skip(10).limit(20)#begin_time__gt=datetime.datetime.now())
+    return render_template('main.html',matches=match)
+
+
+@app.route('/player.html')
+def player():
+    return render_template('player.html')
+
 @app.route('/leisu')
 def leisu():
     #match=Match.objects(begin_time__gt=datetime.datetime.now())
