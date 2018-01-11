@@ -4,7 +4,7 @@ from time import time
 from flask import Flask, request
 from flask import jsonify
 from flask import render_template
-from leisu_api.ls_parser import leisu
+from leisu_api.ls_parser.leisu import parse_stream
 import json
 import datetime
 from flask_cors import CORS
@@ -22,7 +22,7 @@ def hello():
 @app.route('/obtain_url')
 def obtain_rul():
     gameId=request.args.get('id')
-    url= leisu.parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
+    url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
     return jsonify(code=0,result={'url':url})
 
 @app.route('/leisu/ws',methods=['get','post'])
@@ -73,7 +73,9 @@ def main2():
 
 @app.route('/player.html')
 def player():
-    return render_template('player.html')
+    gameId=request.args.get('id')
+    url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
+    return render_template('player.html',stream=url)
 
 @app.route('/leisu')
 def leisu():

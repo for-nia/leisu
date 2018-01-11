@@ -21,7 +21,7 @@
             </div>
             <div class="time">12:20</div>
             <div class="title">
-                <a class="team-palyer" href="/player.html" target="_blank"></a>
+                <a class="team-palyer" href="/player.html?id={{match.match_id}}" target="_blank"></a>
                 <div class="team">
                     <div class="team-logo">
                         <img src="{{match.home_head}}">
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="line-info">
-                <a class="first" href="/main.html">线路</a>
+                <a class="first" href="/player.html?id={{match.match_id}}">线路</a>
             </div>
         </div>
         {% endfor %}

@@ -34,7 +34,6 @@ class LeisuLiveMatches(scrapy.Spider):
     
     def parse(self,response):
         #res=session.get('https://api.leisu.com/app/live/live?app=0&lang=0&platform=2&ver=2.6.1')
-	print response.body
         j=json.loads(response.body)
         mathes=j['matches']
         events=j['events']

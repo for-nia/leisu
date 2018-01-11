@@ -48,7 +48,11 @@
         variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
         autoplay:true,//自动播放
         live:true,
+	{% if not stream %}
         video:'http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8'//视频地址
+	{% else %}
+        video:'{{ stream|safe }}'//视频地址
+	{% endif %}
     };
     var player=new ckplayer(videoObject);
 </script>
