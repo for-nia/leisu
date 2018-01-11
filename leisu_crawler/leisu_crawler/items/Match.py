@@ -29,6 +29,7 @@ class Match(Document):
     away_red_card=IntField()
     away_yellow_card=IntField()
     stream=IntField()
+    ttzb=IntField()
     status=IntField()#1 未开始  2 已结束
 
 class Player(Document):
