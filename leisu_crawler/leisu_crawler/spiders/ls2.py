@@ -52,6 +52,7 @@ class LeisuLiveMatches(scrapy.Spider):
             m.away_name=away[1]
             m.away_score=away[2]
             m.home_head , m.away_head = self.headers(m.match_id)
+            m.stream=match[10]
             match_found = Match.objects(match_id=m.match_id)
             if match_found:
                 match_found.update_one(home_score=m.home_score, away_score=m.away_score,

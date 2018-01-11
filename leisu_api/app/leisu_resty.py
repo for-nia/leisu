@@ -6,9 +6,9 @@ from flask import jsonify
 from flask import render_template
 from leisu_api.ls_parser.leisu import parse_stream
 import json
-import datetime
+from datetime import datetime,timedelta
 from flask_cors import CORS
-
+import re
 from leisu_crawler.leisu_crawler.items.Match import Match
 
 app=Flask(__name__,static_folder='static')
@@ -67,7 +67,7 @@ def index():
 
 @app.route('/main.html')
 def main2():
-    match=Match.objects().order_by('begin_time','+a').skip(10).limit(20)#begin_time__gt=datetime.datetime.now())
+    match=Match.objects(begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
     return render_template('main.html',matches=match)
 
 
@@ -94,9 +94,18 @@ def get_all():
 def page_not_found(e):
     return jsonify(code=-20,result='not found')
 
+@app.route('/refresh_line')
+def start_requests():
+    matches=Match.objects(begin_time__lt=datetime.now(),begin_time_gt=datetime.now()-timedelta(hours=3),ttzb=0)
+    for match in matches:
+        url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % matches.match_id)
+        p=re.compile(r'ttzb(\d+)')
+        m=p.findall(url)
+        if m:
+            match.update(ttzb=m[0])
 
 def run(port=8989):
-    app.run('0.0.0.0',port)
+    app.run('0.0.0.0',port,threaded=True)
 
 if __name__=='__main__':
     port=8989
