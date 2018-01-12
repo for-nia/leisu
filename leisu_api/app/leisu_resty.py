@@ -1,4 +1,5 @@
 import sys
+sys.path.append('..')
 from time import time
 
 from flask import Flask, request
@@ -9,7 +10,7 @@ import json
 from datetime import datetime,timedelta
 from flask_cors import CORS
 import re
-from leisu_crawler.leisu_crawler.items.Match import Match
+from common.items.Match import Match
 
 app=Flask(__name__,static_folder='static')
 CORS(app)

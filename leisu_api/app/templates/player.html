@@ -49,7 +49,7 @@
         autoplay:true,//自动播放
         live:true,
 	{% if not stream %}
-        video:'http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8'//视频地址
+        video:'http://cg01.hrtn.net:9090/live/cctv5_1500.m3u8'//视频地址
 	{% else %}
         video:'{{ stream|safe }}'//视频地址
 	{% endif %}
