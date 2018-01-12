@@ -60,16 +60,16 @@ def matches():
     matches = Match.objects(status=1).order_by('begin_time','a+').skip(page*pageSize).limit(pageSize)  #
     return jsonify(code=0,result={'matches':[m.to_mongo() for m in matches]})
 
-@app.route('/index.html')
-def index():
-    match=Match.objects().order_by('begin_time','+a').skip(10).limit(20)#begin_time__gt=datetime.datetime.now())
-    return render_template('index.html',matches=match)
 
 @app.route('/main.html')
 def main2():
     match=Match.objects(begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
     return render_template('main.html',matches=match)
 
+@app.route('/')
+def index():
+    match=Match.objects(begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
+    return render_template('main.html',matches=match)
 
 @app.route('/player.html')
 def player():
@@ -98,11 +98,13 @@ def page_not_found(e):
 def start_requests():
     matches=Match.objects(begin_time__lt=datetime.now(),begin_time__gt=datetime.now()-timedelta(hours=3),ttzb=0)
     for match in matches:
-        url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % matches.match_id)
-        p=re.compile(r'ttzb(\d+)')
-        m=p.findall(url)
-        if m:
-            match.update(ttzb=m[0])
+        url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % str(match.match_id))
+	print url
+	if url:
+            p=re.compile(r'ttzb(\d+)')
+            m=p.findall(url)
+            if m:
+                match.update(ttzb=m[0])
     return jsonify(code=0,result='ok')
 
 def run(port=8989):

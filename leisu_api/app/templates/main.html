@@ -19,7 +19,7 @@
             <div class="game-name">
                 <div class="name">{{match.league_name}}</div>
             </div>
-            <div class="time">12:20</div>
+            <div class="time">{{ match.begin_time.strftime('%H:%M') }}</div>
             <div class="title">
                 <a class="team-palyer" href="/player.html?id={{match.match_id}}" target="_blank"></a>
                 <div class="team">
