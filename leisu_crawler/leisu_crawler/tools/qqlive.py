@@ -33,7 +33,7 @@ def add_channel(channel_name):
     channel.pc_stream=get_url(channel_name[6:])
     channel.m_stream=channel.pc_stream
     channel.channel_name=channel_name
-    channel.c_from='ttzb'
+    channel.c_from='qqlive'
     channel.type='m3u8'
     channel.name='QQ直播'+channel_name[6:]
     channel.save()
@@ -44,7 +44,7 @@ def refresh_all():
         refresh(channel.channel_name)
 
 def refresh(channel):
-    pc_stream=get_url(channel.channel_name[5:])
+    pc_stream=get_url(channel.channel_name[6:])
     m_stream=pc_stream
     channel.update(pc_stream=pc_stream,m_stream=m_stream)
 
