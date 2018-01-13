@@ -1,7 +1,7 @@
 # coding=utf8
 from mongoengine import *
 
-connect(host=r'mongodb://ls:ls_data@localhost:27017/test')
+connect(host=r'mongodb://ls:ls_data@localhost:27017/leisu')
 
 
 class Match(Document):
@@ -30,7 +30,11 @@ class Match(Document):
     away_yellow_card=IntField()
     stream=IntField()
     ttzb=IntField()
+    m3u8=StringField()
     status=IntField()#1 未开始  2 已结束
+    channels=ListField()
+    m_from=StringField()
+    meta = {'strict': False}
 
 class Player(Document):
     player_id=StringField()
@@ -88,6 +92,14 @@ class Sanheyi(Document):
     bz_current=ListField()
     bl_first=ListField()
     bl_current=ListField()
+
+class Channel(Document):
+    channel_name=StringField()
+    type=StringField()
+    c_from=StringField()
+    pc_stream=StringField()
+    m_stream=StringField()
+    name=StringField()
 
 
 

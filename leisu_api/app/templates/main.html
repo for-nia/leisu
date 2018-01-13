@@ -36,9 +36,17 @@
                     <span class="team-name">{{match.away_name}}</span>
                 </div>
             </div>
+            {% if match.channels %}
             <div class="line-info">
-                <a class="first" target="_blank" href="/player.html?id={{match.match_id}}">线路</a>
+            {% for channel in match.channels%}
+                <a class="first" target="_blank" href="/player.html?id={{match.match_id}}&channel={{channel}}">线路</a>
+            {% endfor%}
             </div>
+            {% else%}
+            <div class="line-info">
+                <a class="first" target="_blank" href="/player.html?id={{match.match_id}}&channel={{channel}}">线路</a>
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

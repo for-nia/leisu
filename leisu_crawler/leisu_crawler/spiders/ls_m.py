@@ -1,13 +1,6 @@
 # coding=utf8
 import scrapy
-import re
 from leisu_crawler.items.Match import Match
-from leisu_crawler.items.Match import Oupei
-from leisu_crawler.items.Match import Yapei
-from leisu_crawler.items.Match import Biglittle
-from leisu_crawler.items.Match import Sanheyi
-from datetime import datetime
-import ast
 import requests
 from datetime import datetime
 import time
@@ -29,12 +22,12 @@ class LeisuLiveMatches(scrapy.Spider):
     session=requests.Session()
 
     def start_requests(self):
-        urls=['https://api.leisu.com/app/live/live?app=0&lang=0&platform=2&ver=2.6.1']
-	yield scrapy.Request(urls[0],callback=self.parse)
+        urls=['http://api.leisu.com/app/live/live?app=0&lang=0&platform=2&ver=2.6.1']
+        yield scrapy.Request(urls[0],callback=self.parse)
     
     def parse(self,response):
-        #res=session.get('https://api.leisu.com/app/live/live?app=0&lang=0&platform=2&ver=2.6.1')
-        j=json.loads(response.body)
+        res=self.session.get('http://api.leisu.com/app/live/live?app=0&lang=0&platform=2&ver=2.6.1')
+        j=json.loads(res.text)
         mathes=j['matches']
         events=j['events']
         for match in mathes:
@@ -54,6 +47,8 @@ class LeisuLiveMatches(scrapy.Spider):
             m.home_head , m.away_head = self.headers(m.match_id)
             m.stream=match[10]
             m.ttzb=0
+            m.m_from='leisu'
+            m.status=1
             match_found = Match.objects(match_id=m.match_id)
             if match_found:
                 match_found.update_one(home_score=m.home_score, away_score=m.away_score,
@@ -63,7 +58,7 @@ class LeisuLiveMatches(scrapy.Spider):
     
     
     def headers(self,match_id):
-        res=self.session.get('https://api.leisu.com/app/live/matchdetail?app=0&k=4b5b53f43cc5674897a133bbd49c5c07&pk=qGE50mjp&platform=2&t=%s&ver=2.6.1&sid=%s'%(int(time.time()),match_id))
+        res=self.session.get('http://api.leisu.com/app/live/matchdetail?app=0&k=4b5b53f43cc5674897a133bbd49c5c07&pk=qGE50mjp&platform=2&t=%s&ver=2.6.1&sid=%s'%(int(time.time()),match_id))
         m=json.loads(res.text)
         return self.leisu_img_fmt%m['home'][2],self.leisu_img_fmt%m['away'][2]
 

@@ -10,7 +10,7 @@ import json
 from datetime import datetime,timedelta
 from flask_cors import CORS
 import re
-from common.items.Match import Match
+from common.items.Match import Match,Channel
 
 app=Flask(__name__,static_folder='static')
 CORS(app)
@@ -69,14 +69,21 @@ def main2():
 
 @app.route('/')
 def index():
-    match=Match.objects(begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
+    match=Match.objects(status=1,begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
     return render_template('main.html',matches=match)
 
 @app.route('/player.html')
 def player():
     gameId=request.args.get('id')
-    url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
-    return render_template('player.html',stream=url)
+    channel_name=request.args.get('channel')
+    print channel_name
+    channels=Channel.objects(channel_name=channel_name)
+    channel = channels[0] if len(channels)>0 else None
+    print channel
+    if not channel or (not channel.pc_stream and not channel.m_stream):
+        channel=Channel() if not channel else channel
+        channel.pc_stream = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
+    return render_template('player.html',channel=channel)
 
 @app.route('/leisu')
 def leisu():
