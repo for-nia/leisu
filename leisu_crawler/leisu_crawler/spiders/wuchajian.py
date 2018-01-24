@@ -14,9 +14,9 @@ class Wuchajian(scrapy.Spider):
 
     def start_requests(self):
         urls=['http://www.wuchajian.com/']
-        yield scrapy.Request(urls[0],self.parse)
+        yield scrapy.Request(urls[0],self.parsem)
 
-    def parse(self, response):
+    def parsem(self, response):
         trs = response.css('tr.against')
         for tr in trs:
             league_name=tr.xpath('.//td[@class="matcha"]/a/text()').extract()[0]
@@ -43,6 +43,7 @@ class Wuchajian(scrapy.Spider):
             else:
                 match.save()
                 self.handle_channel(live_link,match)
+	    pass
 
 
     def handle_channel(self,links,match):
