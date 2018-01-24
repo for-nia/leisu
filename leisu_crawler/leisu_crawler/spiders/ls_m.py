@@ -51,7 +51,7 @@ class LeisuLiveMatches(scrapy.Spider):
             m.status=1
             match_found = Match.objects(match_id=m.match_id)
             if match_found:
-                match_found.update_one(home_score=m.home_score, away_score=m.away_score,stream=m.stream,
+                match_found.update_one(home_score=m.home_score, away_score=m.away_score,stream=m.stream,begin_time=m.begin_time,
                                        upsert=True)
             else:
                 m.save()

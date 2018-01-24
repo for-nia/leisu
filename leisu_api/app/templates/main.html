@@ -21,7 +21,7 @@
             </div>
             <div class="time">{{ match.begin_time.strftime('%H:%M') }}</div>
             <div class="title">
-                <a class="team-palyer" href="/player.html?id={{match.match_id}}" target="_blank"></a>
+                <a class="team-palyer" href="/player.html?id={{match.match_id}}&channel={{match.channels[0]}}" target="_blank"></a>
                 <div class="team">
                     <div class="team-logo">
                         <img src="{{match.home_head}}">

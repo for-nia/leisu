@@ -1,0 +1,3 @@
+check process leisu_api with pidfile /home/yearfu/workspace/leisu/leisu_api/pid
+ start program = "/home/yearfu/workspace/leisu/leisu_api/start.sh" as uid yearfu and gid yearfu
+ stop program  = "/home/yearfu/workspace/leisu/leisu_api/stop.sh" as uid yearfu and gid yearfu
