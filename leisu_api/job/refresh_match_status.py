@@ -6,7 +6,7 @@ import requests
 import json
 from datetime import datetime,timedelta
 def refresh():
-    matches=Match.objects(begin_time__lt=datetime.now(),begin_time__gt=datetime.now()-timedelta(hours=3))
+    matches=Match.objects(begin_time__lt=datetime.now(),begin_time__gt=datetime.now()-timedelta(hours=3),m_from='leisu')
     for match in matches:
         status = get_status(match.match_id)
         if status > 9:

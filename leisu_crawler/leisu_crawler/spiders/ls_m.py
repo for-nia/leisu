@@ -35,7 +35,7 @@ class LeisuLiveMatches(scrapy.Spider):
             m.match_id=match[0]
             m.league_id=str(match[1])
             m.league_name=events[str(m.league_id)][0]
-            m.begin_time=datetime.fromtimestamp(match[4])
+            m.begin_time=datetime.fromtimestamp(match[3])
             home=match[5]
             m.home_id=str(home[0])
             m.home_name=home[1]

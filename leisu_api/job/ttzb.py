@@ -39,12 +39,15 @@ def add_channel(channel_name):
 def refresh_all():
     channels=Channel.objects(c_from='ttzb')
     for channel in channels:
-        refresh(channel.channel_name)
+        refresh(channel)
 
 def refresh(channel):
     pc_stream=get_stream(channel.channel_name)
-    m_stream=pc_stream
-    channel.update(pc_stream=pc_stream,m_stream=m_stream)
+    print pc_stream
+    if pc_stream:
+        m_stream=pc_stream
+        channel.update(pc_stream=pc_stream,m_stream=m_stream)
 
 if __name__=='__main__':
-    start_requests()
+    #start_requests()
+    refresh_all()

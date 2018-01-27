@@ -22,8 +22,9 @@ def get_url(num):
 
 
 def get_stream(url):
-    parsed=urlparse.urlparse(url)
-    return urlparse.parse_qs(parsed.query)['id'][0]
+    #parsed=urlparse.urlparse(url)
+    #return urlparse.parse_qs(parsed.query)['id'][0]
+    return url.split('?id=')[1]
 
 def add_channel(channel_name):
     channel_found=Channel.objects(channel_name=channel_name)
@@ -41,10 +42,11 @@ def add_channel(channel_name):
 def refresh_all():
     channels=Channel.objects(c_from='qqlive')
     for channel in channels:
-        refresh(channel.channel_name)
+        refresh(channel)
 
 def refresh(channel):
     pc_stream=get_url(channel.channel_name[6:])
+    print pc_stream
     m_stream=pc_stream
     channel.update(pc_stream=pc_stream,m_stream=m_stream)
 

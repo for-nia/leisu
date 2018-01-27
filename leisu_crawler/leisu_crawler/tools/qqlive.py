@@ -30,18 +30,19 @@ def add_channel(channel_name):
     if channel_found:
         return
     channel=Channel()
+    print channel_name
     channel.pc_stream=get_url(channel_name[6:])
     channel.m_stream=channel.pc_stream
     channel.channel_name=channel_name
     channel.c_from='qqlive'
     channel.type='m3u8'
-    channel.name='QQ直播'+channel_name[6:]
+    channel.name=u'QQ直播'+channel_name[6:]
     channel.save()
 
 def refresh_all():
     channels=Channel.objects(c_from='qqlive')
     for channel in channels:
-        refresh(channel.channel_name)
+        refresh(channel)
 
 def refresh(channel):
     pc_stream=get_url(channel.channel_name[6:])

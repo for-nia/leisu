@@ -11,7 +11,7 @@ from job import ttzb
 def start_requests():
     matches=Match.objects(m_from='leisu',begin_time__lt=datetime.now(),begin_time__gt=datetime.now()-timedelta(hours=3),stream=1,status=1)
     for match in matches:
-        print match.home_name
+        print match.home_name.encode('utf-8')
         url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % match.match_id)
         print url
         if not url:continue
