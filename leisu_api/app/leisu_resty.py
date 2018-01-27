@@ -81,7 +81,9 @@ def m_index():
 def player():
     gameId=request.args.get('id')
     match=Match.objects(match_id=gameId)[0]
+    print match.flv
     if match.flv:
+        print match.flv
         return render_template('player.html',flv=match.flv)
         pass
     else:
