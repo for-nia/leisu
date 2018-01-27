@@ -16,11 +16,13 @@ headers={
 
 def get_rtmp(url):
     r = requests.get(url, headers=headers, allow_redirects=False)
-    p=re.compile(r'"(rtmp:.*)"')
+    p=re.compile(r'"(rtmp:.*)"|"(http:.*)"')
+    #print r.text
     m=p.findall(r.text)
     # print r.text
-    if m:
-        return m[0]
+    #print m
+    if m and m[0]:
+            return m[0][0] if m[0][0] else m[0][1]
 
 if __name__=='__main__':
-    get_rtmp('http://www.goallive.tv/go?id=3107')
+    print get_rtmp('http://www.goallive.tv/go?id=3272')

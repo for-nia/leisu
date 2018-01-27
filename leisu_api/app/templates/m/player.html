@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .player{
+            width: 960px;
+            margin: 0 auto 20px;
+            box-shadow:0 0 30px #141d29;
+        }
+        .player img{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .player .player-box{
+            width: 1000px;
+            background: #313131;
+            height: 600px;
+            margin: 0 auto;
+            box-sizing:border-box;
+            position: relative;
+
+        }
+        .player .player-box .ckplayer{
+            height: inherit;
+            width: inherit;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="player">
+    <!--<img src="{{ url_for('static',filename='img/player-bg.jpg')}}">-->
+    <img src="/static/img/player-bg.jpg">
+    <div class="player-box">
+        <div class="ckplayer"></div>
+    </div>
+</div>
+<script type="text/javascript" src="/static/ckplayer/ckplayer.js"></script>
+<script type="text/javascript">
+    var videoObject = {
+        container: '.ckplayer',//“#”代表容器的ID，“.”或“”代表容器的class
+        variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+        autoplay:true,//自动播放
+        live:true,
+	{% if not channel or not channel.pc_stream %}
+        video:'http://cg01.hrtn.net:9090/live/cctv5_1500.m3u8'//视频地址
+    {% elif flv%}
+        video:'{{ flv|safe }}'//视频地址
+	{% else %}
+        video:'{{ channel.pc_stream|safe }}'//视频地址
+	{% endif %}
+    };
+    var player=new ckplayer(videoObject);
+</script>
+</body>
+</html>

@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>天天看球</title>
+    <title>Title</title>
     <meta name="referrer" content="no-referrer" />
-    <link href="{{ url_for('static',filename='main.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='m/main.css') }}" type="text/css" rel="stylesheet">
     <script type="text/javascript">
         function isMobile() {
             var check = false;
@@ -13,8 +13,8 @@
             })(navigator.userAgent || navigator.vendor || window.opera);
             return check;
         };
-        if (isMobile()) {
-            window.location = "/m";
+        if (!isMobile()) {
+            window.location = "/";
         }
     </script>
 </head>
@@ -28,12 +28,12 @@
     <div class="content">
         {% for match in matches %}
         <div class="list">
+            <a class="team-palyer" href="/player.html?id={{match.match_id}}&channel={{match.channels[0]}}" target="_blank"></a>
             <div class="game-name">
                 <div class="name">{{match.league_name}}</div>
             </div>
             <div class="time">{{ match.begin_time.strftime('%H:%M') }}</div>
             <div class="title">
-                <a class="team-palyer" href="/player.html?id={{match.match_id}}&channel={{match.channels[0]}}" target="_blank"></a>
                 <div class="team">
                     <div class="team-logo">
                         <img src="{{match.home_head}}">
@@ -48,17 +48,6 @@
                     <span class="team-name">{{match.away_name}}</span>
                 </div>
             </div>
-            {% if match.channels %}
-            <div class="line-info">
-            {% for channel in match.channels%}
-                <a class="first" target="_blank" href="/player.html?id={{match.match_id}}&channel={{channel}}">线路</a>
-            {% endfor%}
-            </div>
-            {% else%}
-            <div class="line-info">
-                <a class="first" target="_blank" href="/player.html?id={{match.match_id}}&channel={{channel}}">线路</a>
-            </div>
-            {% endif %}
         </div>
         {% endfor %}
     </div>

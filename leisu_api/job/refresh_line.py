@@ -21,6 +21,8 @@ def start_requests():
             num=m[0]
             match.update(channels=['ttzb'+num])
             ttzb.add_channel('ttzb'+str(num))
+        elif 'flv' in url:
+            match.update(flv=url)
 
 if __name__=='__main__':
     start_requests()

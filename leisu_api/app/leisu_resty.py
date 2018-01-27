@@ -72,18 +72,28 @@ def index():
     match=Match.objects(status=1,begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
     return render_template('main.html',matches=match)
 
+@app.route('/m')
+def m_index():
+    match=Match.objects(status=1,begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
+    return render_template('m/main.html',matches=match)
+
 @app.route('/player.html')
 def player():
     gameId=request.args.get('id')
-    channel_name=request.args.get('channel')
-    print channel_name
-    channels=Channel.objects(channel_name=channel_name)
-    channel = channels[0] if len(channels)>0 else None
-    print channel
-    if not channel or (not channel.pc_stream and not channel.m_stream):
-        channel=Channel() if not channel else channel
-        channel.pc_stream = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
-    return render_template('player.html',channel=channel)
+    match=Match.objects(match_id=gameId)[0]
+    if match.flv:
+        return render_template('player.html',flv=match.flv)
+        pass
+    else:
+        channel_name=request.args.get('channel')
+        print channel_name
+        channels=Channel.objects(channel_name=channel_name)
+        channel = channels[0] if len(channels)>0 else None
+        print channel
+        if not channel or (not channel.pc_stream and not channel.m_stream):
+            channel=Channel() if not channel else channel
+            channel.pc_stream = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
+        return render_template('player.html',channel=channel)
 
 @app.route('/leisu')
 def leisu():
