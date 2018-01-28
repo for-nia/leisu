@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import urlparse
 import sys
-from leisu_crawler.items.Match import Channel
+from common.items.Match import Channel
 
 def get_url(num):
     webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
@@ -22,21 +22,21 @@ def get_url(num):
 
 
 def get_stream(url):
-    parsed=urlparse.urlparse(url)
-    return urlparse.parse_qs(parsed.query)['id'][0]
+    #parsed=urlparse.urlparse(url)
+    #return urlparse.parse_qs(parsed.query)['id'][0]
+    return url.split('?id=')[1]
 
 def add_channel(channel_name):
     channel_found=Channel.objects(channel_name=channel_name)
     if channel_found:
         return
     channel=Channel()
-    print channel_name
     channel.pc_stream=get_url(channel_name[6:])
     channel.m_stream=channel.pc_stream
     channel.channel_name=channel_name
     channel.c_from='qqlive'
     channel.type='m3u8'
-    channel.name=u'QQ直播'+channel_name[6:]
+    channel.name='QQ直播'+channel_name[6:]
     channel.save()
 
 def refresh_all():
@@ -46,6 +46,7 @@ def refresh_all():
 
 def refresh(channel):
     pc_stream=get_url(channel.channel_name[6:])
+    print pc_stream
     m_stream=pc_stream
     channel.update(pc_stream=pc_stream,m_stream=m_stream)
 

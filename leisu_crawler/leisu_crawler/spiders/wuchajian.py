@@ -72,6 +72,7 @@ class Wuchajian(scrapy.Spider):
                 else :
                     match.channels.append(channel_name)
                     match.update(channels=match.channels)
+                    self.check_channel(channel_name)
 
     def check_channel(self,channel_name):
         channels=Channel.objects(channel_name=channel_name)
