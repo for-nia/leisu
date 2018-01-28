@@ -31,10 +31,12 @@ class Match(Document):
     stream=IntField()
     ttzb=IntField()
     m3u8=StringField()
+    flv=StringField()
     status=IntField()#1 未开始  2 已结束
     channels=ListField()
     m_from=StringField()
     wcj_id=StringField()
+    meta = {'strict': False}
 
 class Player(Document):
     player_id=StringField()
