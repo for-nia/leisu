@@ -34,6 +34,7 @@ class Match(Document):
     status=IntField()#1 未开始  2 已结束
     channels=ListField()
     m_from=StringField()
+    wcj_id=StringField()
 
 class Player(Document):
     player_id=StringField()

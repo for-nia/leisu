@@ -36,7 +36,7 @@ def add_channel(channel_name):
     channel.channel_name=channel_name
     channel.c_from='qqlive'
     channel.type='m3u8'
-    channel.name='QQ直播'+channel_name[6:]
+    channel.name=u'QQ直播'+channel_name[6:]
     channel.save()
 
 def refresh_all():

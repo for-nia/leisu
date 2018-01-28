@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from leisu_crawler.tools import ttzb
 from leisu_crawler.tools import qqlive
-
+from bson import json_util
 
 class Wuchajian(scrapy.Spider):
     name = "Wuchajian"
@@ -20,14 +20,15 @@ class Wuchajian(scrapy.Spider):
         trs = response.css('tr.against')
         for tr in trs:
             league_name=tr.xpath('.//td[@class="matcha"]/a/text()').extract()[0]
-            if not league_name=='NBA':
+            if league_name!='NBA' and league_name != u'西甲':
                 continue
             teams=tr.xpath('.//td[@class="teama"]/a/strong/text()').extract()
-            print teams[0]+'vs'+teams[1]
+            print teams[0].encode('utf-8')+'vs'+teams[1].encode('utf-8')
             live_link=tr.xpath('.//td[@class="live_link"]/a/@href').extract()
             match_id=tr.xpath('.//td[@class="live_link"]/@id').extract()[0]
             begin_time=tr.xpath('.//td[@class="tixing"]/@t').extract()[0]
-            print match_id
+            if not begin_time:return
+            #print match_id
             match=Match(match_id=match_id)
             match.home_name=teams[0]
             match.away_name=teams[1]
@@ -38,17 +39,33 @@ class Wuchajian(scrapy.Spider):
             match_found=Match.objects(match_id=match_id)
             match.stream=1
             match.status=1
+            #print match.away_name + ' vs ' +match.home_name
             if match_found:
                 self.handle_channel(live_link,match_found[0])
+                self.find_ls_match(match_found[0])
             else:
-                match.save()
-                self.handle_channel(live_link,match)
-	    pass
+                if match.league_name == 'NBA':
+                    match.save()
+                    self.handle_channel(live_link,match)
+                elif match.league_name == u'西甲':
+                    m=self.find_ls_match(match)
+                    if m:self.handle_channel(live_link,m)
+
+
+    def find_ls_match(self,match):
+        #print match.away_name+'+++'+match.home_name
+        matches = Match.objects(begin_time=match.begin_time)
+        if len(matches)<=0:return
+        for m_ls in matches:
+            print 'matched:'
+            print m_ls.home_name.encode('utf-8')+'vs'+m_ls.away_name.encode('utf-8')
+            if match.home_name==m_ls.home_name or match.home_name == m_ls.away_name or match.away_name == m_ls.home_name or match.away_name==m_ls.away_name:
+                print match.away_name + ' vs ' +match.home_name
+                m_ls.update(wcj_id=str(match.match_id),stream=1,upsert=True)
+                return m_ls
 
 
     def handle_channel(self,links,match):
-        self.add_channel('ttzb1')
-        self.add_channel('qqlive1')
         for link in links:
             channel_name=''
             if 'qqlive' in link:
