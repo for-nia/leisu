@@ -7,8 +7,8 @@ import re
 from datetime import datetime
 from leisu_crawler.tools import ttzb
 from leisu_crawler.tools import qqlive
-from bson import json_util
 
+leagues=[u'西甲',u'荷甲',u'法甲',u'意甲',u'英超']
 class Wuchajian(scrapy.Spider):
     name = "Wuchajian"
 
@@ -20,7 +20,7 @@ class Wuchajian(scrapy.Spider):
         trs = response.css('tr.against')
         for tr in trs:
             league_name=tr.xpath('.//td[@class="matcha"]/a/text()').extract()[0]
-            if league_name!='NBA' and league_name != u'西甲':
+            if league_name!='NBA' and league_name not in leagues:
                 continue
             teams=tr.xpath('.//td[@class="teama"]/a/strong/text()').extract()
             print teams[0].encode('utf-8')+'vs'+teams[1].encode('utf-8')
@@ -47,7 +47,7 @@ class Wuchajian(scrapy.Spider):
                 if match.league_name == 'NBA':
                     match.save()
                     self.handle_channel(live_link,match)
-                elif match.league_name == u'西甲':
+                elif match.league_name in leagues:
                     m=self.find_ls_match(match)
                     if m:self.handle_channel(live_link,m)
 
