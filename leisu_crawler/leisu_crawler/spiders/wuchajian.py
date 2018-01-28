@@ -57,10 +57,9 @@ class Wuchajian(scrapy.Spider):
         matches = Match.objects(begin_time=match.begin_time)
         if len(matches)<=0:return
         for m_ls in matches:
-            print 'matched:'
-            print m_ls.home_name.encode('utf-8')+'vs'+m_ls.away_name.encode('utf-8')
             if match.home_name==m_ls.home_name or match.home_name == m_ls.away_name or match.away_name == m_ls.home_name or match.away_name==m_ls.away_name:
-                print match.away_name + ' vs ' +match.home_name
+                print 'matched'
+                print match.away_name.encode('utf-8') + ' vs ' +match.home_name.encode('utf-8')
                 m_ls.update(wcj_id=str(match.match_id),stream=1,upsert=True)
                 return m_ls
 
