@@ -2,8 +2,8 @@
 import sys
 sys.path.append('..')
 from datetime import datetime, timedelta
-from common.items.Match import Match
-from common.items.Match import Channel
+from leisu_crawler.items.Match import Match
+from leisu_crawler.items.Match import Channel
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 def start_requests():
