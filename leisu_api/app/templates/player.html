@@ -93,10 +93,10 @@ var _hmt = _hmt || [];
         live:true,
     {% if flv %}
         video:'{{ flv|safe }}'//视频地址
-	{% elif not channel or not channel.pc_stream %}
+	{% elif not channels %}
         video:'http://cg01.hrtn.net:9090/live/cctv5_1500.m3u8'//视频地址
 	{% else %}
-        video:'{{ channel.pc_stream|safe }}'//视频地址
+        video:'{{ channels[0].pc_stream|safe }}'//视频地址
 	{% endif %}
     };
     var player=new ckplayer(videoObject);
