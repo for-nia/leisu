@@ -81,6 +81,8 @@ def m_index():
 def player():
     gameId=request.args.get('id')
     match=Match.objects(match_id=gameId)[0]
+    for c in match.channels:
+        print c
     print match.flv
     if match.flv:
         print match.flv
@@ -89,13 +91,14 @@ def player():
     else:
         channel_name=request.args.get('channel')
         print channel_name
-        channels=Channel.objects(channel_name=channel_name)
-        channel = channels[0] if len(channels)>0 else None
-        print channel
-        if not channel or (not channel.pc_stream and not channel.m_stream):
-            channel=Channel() if not channel else channel
-            channel.pc_stream = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
-        return render_template('player.html',channel=channel)
+        channels=Channel.objects(channel_name__in=match.channels)
+        print channels
+        #channel = channels[0] if len(channels)>0 else None
+        #print channel
+        #if not channel or (not channel.pc_stream and not channel.m_stream):
+        #    channel=Channel() if not channel else channel
+        #    channel.pc_stream = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
+        return render_template('player.html',channels=channels,match_id=match.match_id)
 
 @app.route('/leisu')
 def leisu():
