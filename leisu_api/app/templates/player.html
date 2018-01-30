@@ -93,7 +93,7 @@
     </div>
     {% for channel in channels%}
     <div class="line">
-        <a class="line-change" href="/player.html?id={{match_id}}&channel={{channel.channel_name}}"></a>
+        <a class="line-change" href="/player.html?id={{match.match_id}}&channel={{channel.channel_name}}"></a>
         <div class="span">{{channel.name}}</div>
     </div>
     {%endfor%}
@@ -103,17 +103,19 @@
     var videoObject = {
         container: '.ckplayer',//“#”代表容器的ID，“.”或“”代表容器的class
         variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
-        autoplay:true,//自动播放
-        live:true,
-    {% if flv %}
-        video:'{{ flv|safe }}'//视频地址
-	{% elif not channels %}
-        video:'http://cg01.hrtn.net:9090/live/cctv5_1500.m3u8'//视频地址
-	{% else %}
-        video:'{{ channels[0].pc_stream|safe }}'//视频地址
-	{% endif %}
+        autoplay: true,//自动播放
+        live: true,
+        {% if match.flv %}
+            video: '{{ match.flv|safe }}'//视频地址
+        {% elif channel %}
+            {{ channel.pc_stream|safe }}
+        {% elif channels %}
+            video: '{{ channels[0].pc_stream|safe }}'//视频地址
+        {% else %}
+            video: 'http://cg01.hrtn.net:9090/live/cctv5_1500.m3u8'//视频地址
+        {% endif %}
     };
-    var player=new ckplayer(videoObject);
+    var player = new ckplayer(videoObject);
 </script>
 <script id="DS_PRE_JS" type="text/javascript" 
 src="https://cdn.datastory.com.cn/js/pre-ds-min.js?dsTid=ad5343a8-e196-406a-b4ef-8185b91777c8">
