@@ -108,7 +108,7 @@
         {% if match.flv %}
             video: '{{ match.flv|safe }}'//视频地址
         {% elif channel %}
-            '{{ channel.pc_stream|safe }}'
+            video: '{{ channel.pc_stream|safe }}'
         {% elif channels %}
             video: '{{ channels[0].pc_stream|safe }}'//视频地址
         {% else %}
