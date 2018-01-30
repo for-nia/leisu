@@ -37,7 +37,7 @@ u'开拓者':'http://china.nba.com/media/img/teams/logos/POR_logo.svg',
 u'国王':'http://china.nba.com/media/img/teams/logos/SAC_logo.svg',
 u'马刺':'http://china.nba.com/media/img/teams/logos/SAS_logo.svg',
 u'爵士':'http://china.nba.com/media/img/teams/logos/UTA_logo.svg'}
-leagues=[u'西甲',u'荷甲',u'法甲',u'意甲',u'英超']
+leagues=[u'西甲',u'荷甲',u'法甲',u'意甲',u'英超',u'亚冠杯']
 class Wuchajian(scrapy.Spider):
     name = "Wuchajian"
 

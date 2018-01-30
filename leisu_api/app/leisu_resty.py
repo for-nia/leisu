@@ -86,8 +86,7 @@ def player():
     print match.flv
     if match.flv:
         print match.flv
-        return render_template('player.html',flv=match.flv)
-        pass
+        return render_template('player.html',match=match)
     else:
         channel_name=request.args.get('channel')
         print channel_name
@@ -98,8 +97,12 @@ def player():
         #if not channel or (not channel.pc_stream and not channel.m_stream):
         #    channel=Channel() if not channel else channel
         #    channel.pc_stream = parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % gameId)
-        return render_template('player.html',channels=channels,match_id=match.match_id)
-
+        channel = None if not channels else channels[channel_index(channels,channel_name)]
+        return render_template('player.html',channels=channels,match=match,channel=channel)
+def channel_index(channels,name):
+    for i,c in enumerate(channels):
+        if c.channel_name==name:return i
+    return 0
 @app.route('/leisu')
 def leisu():
     #match=Match.objects(begin_time__gt=datetime.datetime.now())
