@@ -15,12 +15,12 @@ def change_ip():
           quit) | /bin/nc localhost 9051""")
 
 def get_url(num):
-    return get_by_channel_name(u'qqliveHd{}'.format(num))
+    return get_by_channel_name(u'qqliveHD{}'.format(num))
 def get_by_channel_name(name):
     webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
     webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.referer']='http://www.zuqiu.me/tv/qqlive41.html'
     driver = webdriver.PhantomJS(service_args=service_args)
-    change_ip()
+    #change_ip()
     driver.get('http://w.zhibo.me:8088/{}.php'.format(name))
     print driver.page_source
     frames=driver.find_elements(By.TAG_NAME,'iframe')

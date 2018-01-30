@@ -5,18 +5,7 @@
     <title>看球360</title>
     <meta name="referrer" content="no-referrer" />
     <link href="{{ url_for('static',filename='m/main.css') }}" type="text/css" rel="stylesheet">
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?c4752c06099740b5014c48175ce1da27";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
     <script type="text/javascript">
-	(function(e){function u(){var n=i.getBoundingClientRect().width;n/t>830&&(n=830*t),e.rem=n/16,i.style.fontSize=e.rem+"px"}var t,n,r,i=document.documentElement,s=document.querySelector('meta[name="viewport"]');if(s){var o=s.getAttribute("content").match(/initial\-scale=(["']?)([\d\.]+)\1?/);o&&(n=parseFloat(o[2]),t=parseInt(1/n))}else s=document.createElement("meta"),s.setAttribute("name","viewport"),s.setAttribute("content","width=device-width, initial-scale=0.5, user-scalable=no, minimal-ui"),i.firstElementChild.appendChild(s);e.addEventListener("resize",function(){clearTimeout(r),r=setTimeout(u,300)},!1),e.addEventListener("pageshow",function(e){e.persisted&&(clearTimeout(r),r=setTimeout(u,300))},!1),"complete"===document.readyState?document.body.style.fontSize=12*t+"px":document.addEventListener("DOMContentLoaded",function(){document.body.style.fontSize=12*t+"px"},!1),u()})(window);
         function isMobile() {
             var check = false;
             (function (a) {
@@ -64,6 +53,9 @@ var _hmt = _hmt || [];
         {% endfor %}
     </div>
 </div>
+<script id="DS_PRE_JS" type="text/javascript" 
+src="https://cdn.datastory.com.cn/js/pre-ds-min.js?dsTid=ad5343a8-e196-406a-b4ef-8185b91777c8">
+</script>
 
 </body>
 </html>
