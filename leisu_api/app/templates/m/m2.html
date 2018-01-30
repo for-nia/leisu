@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="referrer" content="no-referrer" />
+    <title>YVPLAY - NBA比赛直播 THIS IS WHY WE PLAY!</title>
+    <link href="/static/font.css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='m/m2.css') }}" type="text/css" rel="stylesheet">
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div class="container-fluid">
+    <div class="header">
+        <div class="center">
+            <div class="logo" style="font-weight: 500">看球360</div>
+            <div class="slogan">资深球迷打造的看球平台</div>
+        </div>
+    </div>
+    {% for match in matches%}
+    <div class="row">
+        <a class="team-palyer" href="/player.html?id={{match.match_id}}&channel={{match.channels[0]}}" target="_blank"></a>
+        <div class="col-md-4 col-xs-4 list">
+            <div class="team">
+                <div>
+                    <img class="teamlogo" src="{{match.home_head}}">
+                </div>
+                <div>
+                    {{match.home_name}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-4">
+            <div class="info">
+                <div>
+                    {{match.league_name}}
+                </div>
+                <div class="time">
+                    {{ match.begin_time.strftime('%H:%M') }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-4">
+            <div class="team">
+                <div>
+                    <img class="teamlogo" src="{{match.away_head}}">
+                </div>
+                <div>
+                    {{match.away_name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="footer" style="text-align: center;">看球360 ©2018 Created by rich</div>
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-41223128-7"></script>
+<script>function gtag() {
+    dataLayer.push(arguments)
+}
+window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-41223128-8")</script>
+</html>

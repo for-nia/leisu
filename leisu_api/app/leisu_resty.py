@@ -75,7 +75,7 @@ def index():
 @app.route('/m')
 def m_index():
     match=Match.objects(status=1,begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
-    return render_template('m/main.html',matches=match)
+    return render_template('m/m2.html',matches=match)
 
 @app.route('/player.html')
 def player():

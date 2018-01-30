@@ -1,0 +1,82 @@
+        html, body {
+            height: 100vh;
+        }
+
+        #wrapper {
+            min-height: 100%;
+        }
+
+        #root {
+        }
+
+        .footer {
+            clear: both;
+            position: relative;
+            z-index: 10;
+            height: 3em;
+            line-height: 3em;
+            background: #f0f2f5;
+
+        }
+        .teamlogo{
+            height: 3rem;
+        }
+        .team{
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            font-size: 14px;
+        }
+        .list{
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info{
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            font-size: 14px;
+        }
+        .time{
+            margin-top: 0.05rem;
+            margin-bottom: 0.05rem;
+        }
+
+        .header {
+            width: 100%;
+            height: 6rem;
+            background: #fff;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .header .center {
+            width: 90%;
+            height: inherit;
+            margin: auto;
+        }
+        .header .center .logo {
+            height: 6rem;
+            line-height: 6rem;
+            font-size: 2rem;
+            margin: auto;
+            text-align: center;
+        }
+        .slogan{
+            height: 6rem;
+            line-height: 6rem;
+            text-align: center;
+            float: right;
+        }
+        .team-palyer{
+            position: absolute;
+            width: 100%;
+            height:100%;
+            top:0;
+            left:0;
+            z-index: 100;
+        }
+        .row{
+            position: relative;
+        }
