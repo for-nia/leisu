@@ -100,7 +100,7 @@ def player():
         channel = None if not channels else channels[channel_index(channels,channel_name)]
         return render_template('player.html',channels=channels,match=match,channel=channel)
 def channel_index(channels,name):
-    for i,c in channels:
+    for i,c in enumerate(channels):
         if c.channel_name==name:return i
     return 0
 @app.route('/leisu')
