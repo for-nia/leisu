@@ -46,7 +46,6 @@ class Player(Document):
     height=IntField()
     weight=IntField()
     country=StringField()
-    u_time=DateTimeField()
 
 class Team(Document):
     team_id=StringField(primary_key=True)
@@ -102,6 +101,7 @@ class Channel(Document):
     pc_stream=StringField()
     m_stream=StringField()
     name=StringField()
+    u_time=DateTimeField()
 
 
 
