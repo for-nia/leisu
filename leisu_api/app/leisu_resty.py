@@ -69,8 +69,14 @@ def main2():
 
 @app.route('/')
 def index():
+    if is_mobile():
+        return m_index()
     match=Match.objects(status=1,begin_time__gt=datetime.now()-timedelta(hours=3),stream=1).order_by('begin_time','+a')
     return render_template('main.html',matches=match)
+
+def is_mobile():
+    ua=request.headers.get('User-Agent')
+    return 'Mobi' in ua
 
 @app.route('/m')
 def m_index():
