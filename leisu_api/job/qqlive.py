@@ -11,6 +11,7 @@ import os
 import requesocks
 import re
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 service_args = ['--proxy=127.0.0.1:9050','--proxy-type=socks5',]
 
@@ -76,6 +77,7 @@ def add_channel(channel_name):
     channel.c_from='qqlive'
     channel.type='m3u8'
     channel.name=u'QQ直播'+channel_name[6:]
+    channel.u_time=datetime.now()
     channel.save()
 
 def refresh_all():
@@ -94,7 +96,7 @@ def refresh(channel):
     print pc_stream
     if pc_stream:
         m_stream=pc_stream
-        channel.update(pc_stream=pc_stream,m_stream=m_stream)
+        channel.update(pc_stream=pc_stream,m_stream=m_stream,u_time=datetime.now())
 
 if __name__=='__main__':
     num=1

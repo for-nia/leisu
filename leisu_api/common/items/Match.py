@@ -46,6 +46,7 @@ class Player(Document):
     height=IntField()
     weight=IntField()
     country=StringField()
+    u_time=DateTimeField()
 
 class Team(Document):
     team_id=StringField(primary_key=True)
