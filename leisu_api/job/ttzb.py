@@ -6,16 +6,25 @@ from common.items.Match import Match
 from common.items.Match import Channel
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import os
+
+service_args = ['--proxy=127.0.0.1:9050','--proxy-type=socks5',]
+
+
 def start_requests():
     matches=Match.objects(begin_time__lt=datetime.now(),begin_time__gt=datetime.now()-timedelta(hours=3),stream=1,ttzb__gt=0)
     for match in matches:
         stream=get_stream(match.ttzb)
         match.update(m3u8=stream)
 
+def change_ip():
+    os.system("""(echo authenticate '"hi@tor"'; echo signal newnym; echo \
+          quit) | /bin/nc localhost 9051""")
+
 
 def get_stream(ttzb):
     webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
-    driver = webdriver.PhantomJS()
+    driver = webdriver.PhantomJS(service_args=service_args)
     driver.get('http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb))
     frames=driver.find_elements(By.ID,'iframepage')
     if len(frames)<=0:
@@ -37,6 +46,7 @@ def add_channel(channel_name):
     channel.save()
 
 def refresh_all():
+    change_ip()
     channels=Channel.objects(c_from='ttzb')
     for channel in channels:
         refresh(channel)
