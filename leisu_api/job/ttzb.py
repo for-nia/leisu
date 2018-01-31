@@ -24,7 +24,8 @@ def change_ip():
 
 def get_stream(ttzb):
     webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
-    driver = webdriver.PhantomJS(service_args=service_args)
+    #driver = webdriver.PhantomJS(service_args=service_args)
+    driver = webdriver.PhantomJS()
     driver.get('http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb))
     frames=driver.find_elements(By.ID,'iframepage')
     if len(frames)<=0:
@@ -47,7 +48,7 @@ def add_channel(channel_name):
     channel.save()
 
 def refresh_all():
-    change_ip()
+    #change_ip()
     channels=Channel.objects(c_from='ttzb')
     for channel in channels:
         refresh(channel)
