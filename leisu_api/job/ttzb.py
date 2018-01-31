@@ -30,7 +30,9 @@ def get_stream(ttzb):
     if len(frames)<=0:
         return ''
     driver.get(frames[0].get_attribute('src'))
-    return driver.find_element_by_id('ckplayer_player').get_attribute('src')
+    src=driver.find_element_by_id('ckplayer_player').get_attribute('src')
+    driver.quit()
+    return src
 
 def add_channel(channel_name):
     channel_found=Channel.objects(channel_name=channel_name)
