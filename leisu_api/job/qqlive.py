@@ -45,7 +45,7 @@ def get_by_channel_name(name):
 	print url
 	res=session.get(url,headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
 	text=res.text
-	print text
+	print text.encode('utf-8')
 	m_video=re.compile(r'<video .*?<\/video>').findall(text)
 	m_iframe=re.compile(r'<iframe .*</iframe>').findall(text)
 	if m_video:

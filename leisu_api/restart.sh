@@ -1,4 +1,4 @@
 #!/bin/sh
-
-stop.sh
-start.sh
+git pull origin
+./stop.sh
+./start.sh
