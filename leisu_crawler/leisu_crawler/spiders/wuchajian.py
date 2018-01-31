@@ -55,11 +55,12 @@ class Wuchajian(scrapy.Spider):
             #if league_name != 'NBA' and league_name not in leagues:
             #   continue
             teams = tr.xpath('.//td[@class="teama"]/a/strong/text()').extract()
+            if len(teams)<=0:continue
             print teams[0].encode('utf-8') + 'vs' + teams[1].encode('utf-8')
             live_link = tr.xpath('.//td[@class="live_link"]/a/@href').extract()
             match_id = tr.xpath('.//td[@class="live_link"]/@id').extract()[0]
             begin_time = tr.xpath('.//td[@class="tixing"]/@t').extract()[0]
-            if not begin_time: return
+            if not begin_time: continue
             # print match_id
             match = Match(match_id=match_id)
             match.home_name = teams[0]
