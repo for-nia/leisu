@@ -52,8 +52,8 @@ class Wuchajian(scrapy.Spider):
         trs = response.css('tr.against')
         for tr in trs:
             league_name = tr.xpath('.//td[@class="matcha"]/a/text()').extract()[0]
-            if league_name != 'NBA' and league_name not in leagues:
-                continue
+            #if league_name != 'NBA' and league_name not in leagues:
+            #   continue
             teams = tr.xpath('.//td[@class="teama"]/a/strong/text()').extract()
             print teams[0].encode('utf-8') + 'vs' + teams[1].encode('utf-8')
             live_link = tr.xpath('.//td[@class="live_link"]/a/@href').extract()
@@ -82,7 +82,8 @@ class Wuchajian(scrapy.Spider):
                     match.away_head = head[match.away_name.strip()]
                     match.save()
                     self.handle_channel(live_link, match)
-                elif match.league_name in leagues:
+                #elif match.league_name in leagues:
+                else:
                     m = self.find_ls_match(match)
                     if m: self.handle_channel(live_link, m)
 
