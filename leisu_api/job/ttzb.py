@@ -57,7 +57,7 @@ def refresh(channel):
     print pc_stream
     if pc_stream:
         m_stream=pc_stream
-        channel.update(pc_stream=pc_stream,m_stream=m_stream)
+        channel.update(pc_stream=pc_stream,m_stream=m_stream,u_time=datetime.now())
 
 if __name__=='__main__':
     #start_requests()
