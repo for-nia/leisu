@@ -101,6 +101,7 @@ class Channel(Document):
     c_from=StringField()
     pc_stream=StringField()
     m_stream=StringField()
+    u_time=DateTimeField()
     name=StringField()
 
 

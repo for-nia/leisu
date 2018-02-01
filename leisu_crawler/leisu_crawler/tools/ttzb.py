@@ -33,7 +33,7 @@ def add_channel(channel_name):
     channel.channel_name=channel_name
     channel.c_from='ttzb'
     channel.type='m3u8'
-    channel.name='天天直播'+channel_name[4:]
+    channel.name=u'足球直播'+channel_name[4:]
     channel.save()
 
 def refresh_all():

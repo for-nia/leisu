@@ -8,12 +8,14 @@ import urlparse
 import sys
 from common.items.Match import Channel
 import os
-import requesocks
+import requests
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 
 service_args = ['--proxy=127.0.0.1:9050','--proxy-type=socks5',]
+ip=''
+with open('/tmp/ip','r') as f:ip=f.read().strip()
 
 def change_ip():
     os.system("""(echo authenticate '"hi@tor"'; echo signal newnym; echo \
@@ -38,10 +40,10 @@ def get_url(num):
 #    return url
 
 def get_by_channel_name(name):
-	session=requesocks.session()
-	session.proxies={'http':'socks5://127.0.0.1:9050','https':'socks5://127.0.0.1:9050'}
+	session=requests.Session()
+	session.proxies={'http':'http://proxy:8128','https':'http://proxy:8128'}
     #r = session.get(url)
-	#res=requesocks.get(u'http://w.zhibo.me:8088/{}.php'.format(name),headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
+	#res=requests.get(u'http://w.zhibo.me:8088/{}.php'.format(name),headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
 	url=u'http://w.zhibo.me:8088/{}.php'.format(name)
 	print url
 	res=session.get(url,headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
@@ -81,7 +83,7 @@ def add_channel(channel_name):
     channel.save()
 
 def refresh_all():
-    change_ip()
+    #change_ip()
     channels=Channel.objects(c_from='qqlive')
     for channel in channels:
         refresh(channel)
