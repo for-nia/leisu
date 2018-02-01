@@ -78,15 +78,14 @@ class Wuchajian(scrapy.Spider):
                 self.handle_channel(live_link, match_found[0])
                 self.find_ls_match(match_found[0])
             else:
-                if match.league_name == 'NBA':
-                    match.home_head = head[match.home_name.strip()]
-                    match.away_head = head[match.away_name.strip()]
-                    match.save()
-                    self.handle_channel(live_link, match)
+                #if match.league_name == 'NBA':
+                #    match.home_head = head[match.home_name.strip()]
+                #    match.away_head = head[match.away_name.strip()]
+                #    match.save()
+                #    self.handle_channel(live_link, match)
                 #elif match.league_name in leagues:
-                else:
-                    m = self.find_ls_match(match)
-                    if m: self.handle_channel(live_link, m)
+                m = self.find_ls_match(match)
+                if m: self.handle_channel(live_link, m)
 
     def find_ls_match(self, match):
         # print match.away_name+'+++'+match.home_name
