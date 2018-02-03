@@ -9,9 +9,9 @@ from selenium.webdriver.common.by import By
 import os
 import signal
 from selenium.common.exceptions import TimeoutException
-import dryscrape
+#import dryscrape
 from bs4 import BeautifulSoup
-import webkit_server
+#import webkit_server
 import requests
 import subprocess
 import time
@@ -32,7 +32,7 @@ headers = {
 }
 
 ip=''
-with open('/tmp/ip','r') as f:ip=f.read().strip()
+#with open('/tmp/ip','r') as f:ip=f.read().strip()
 
 
 def start_requests():
@@ -91,14 +91,18 @@ def change_ip():
 #		video=soup.find('video')
 #		if video:return video['src']
 #	server.kill()
-	
+
 def get_stream(ttzb):
-	headers['referer']='http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb)
-	res = requests.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers)
-	print res.text
+    print u'start parse {}'.format(ttzb)
+    headers['Referer'] = u'http://m.tiantianzhibo.com/channel/ttzb1.html'.format(ttzb)
+    res = requests.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers)
+    print res.text
     j = json.loads(res.text)
     print j['key']
-    r = requests.get(u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v=564&k={}&w=375&h=251'.format(ttzb,j['key']))
+    r = requests.get(
+        u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v={}&k={}&w=375&h=251'.format(ttzb, j['default'][0],
+                                                                                          j['key']))
+    print r.text
     soup = BeautifulSoup(r.text)
     s = soup.findAll('script')
     script = s[1].text
@@ -125,8 +129,7 @@ def get_stream(ttzb):
         os.remove(tmp_file)
     except OSError:
         pass
-    print output
-
+    return output
 
 
 def add_channel(channel_name):
