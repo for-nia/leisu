@@ -95,13 +95,13 @@ def change_ip():
 def get_stream(ttzb):
     print u'start parse {}'.format(ttzb)
     headers['Referer'] = u'http://m.tiantianzhibo.com/channel/ttzb1.html'.format(ttzb)
-    res = requests.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers)
+    session = requests.Session()
+    session.proxies = {'http': 'http://proxy:8128', 'https': 'http://proxy:8128'}
+    res = session.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers)
     print res.text
     j = json.loads(res.text)
     print j['key']
-    r = requests.get(
-        u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v={}&k={}&w=375&h=251'.format(ttzb, j['default'][0],
-                                                                                          j['key']))
+    r = session.get(u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v={}&k={}&w=375&h=251'.format(ttzb,j['default'][0],j['key']))
     print r.text
     soup = BeautifulSoup(r.text)
     s = soup.findAll('script')
