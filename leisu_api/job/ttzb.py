@@ -16,6 +16,20 @@ import requests
 import subprocess
 import time
 import json
+headers = {
+'Accept':'application/json, text/javascript, */*; q=0.01',
+'Accept-Encoding':'gzip, deflate',
+'Accept-Language':'en,zh-CN;q=0.9,zh;q=0.8',
+'Cache-Control':'no-cache',
+'Connection':'keep-alive',
+'Cookie':'Hm_lvt_644b49eb7c9bae6b5db3f0b4f3408d8b=1515507860; ha=1; Hm_lpvt_644b49eb7c9bae6b5db3f0b4f3408d8b=1517654210; Hm_lvt_0d1ed7d868c02273358f9071e84eff0e=1517147600,1517147636,1517505758,1517654218; ha=1; Hm_lpvt_0d1ed7d868c02273358f9071e84eff0e=1517655716',
+'Host':'m.tiantianzhibo.com',
+'Pragma':'no-cache',
+'Referer':'http://m.tiantianzhibo.com/channel/ttzb1.html',
+'requestKey':'ghl6seMfbp0PmFjSlFja1QkzMYqi8VMZ',
+'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1',
+'X-Requested-With':'XMLHttpRequest'
+}
 
 ip=''
 with open('/tmp/ip','r') as f:ip=f.read().strip()
@@ -79,11 +93,12 @@ def change_ip():
 #	server.kill()
 	
 def get_stream(ttzb):
-    res = requests.get('http://m.tiantianzhibo.com/api/signallist.php?ch=ttzb1', headers=headers)
-    # print res.text
+	headers['referer']='http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb)
+	res = requests.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers)
+	print res.text
     j = json.loads(res.text)
     print j['key']
-    r = requests.get(u'http://m.tiantianzhibo.com/player.html?ch=ttzb1&p=dn&v=564&k={}&w=375&h=251'.format(j['key']))
+    r = requests.get(u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v=564&k={}&w=375&h=251'.format(ttzb,j['key']))
     soup = BeautifulSoup(r.text)
     s = soup.findAll('script')
     script = s[1].text
@@ -92,7 +107,7 @@ def get_stream(ttzb):
     with open(tmp_file, 'w') as f:
         f.write(js)
     try:
-        output = subprocess.check_output("node aaa.js", shell=True, stderr=subprocess.STDOUT)
+        output = subprocess.check_output("node {}".format(tmp_file), shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
     try:
@@ -103,7 +118,7 @@ def get_stream(ttzb):
     with open(tmp_file, 'w') as f:
         f.write(str(output).split('function ckcpt()')[0] + 'console.log(play_url)')
     try:
-        output = subprocess.check_output("node bbb.js", shell=True, stderr=subprocess.STDOUT)
+        output = subprocess.check_output("node {}".format(tmp_file), shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
     try:
