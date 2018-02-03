@@ -12,6 +12,10 @@ from selenium.common.exceptions import TimeoutException
 import dryscrape
 from bs4 import BeautifulSoup
 import webkit_server
+import requests
+import subprocess
+import time
+import json
 
 ip=''
 with open('/tmp/ip','r') as f:ip=f.read().strip()
@@ -28,33 +32,33 @@ def change_ip():
           quit) | /bin/nc localhost 9051""")
 
 
-def get_stream(ttzb):
-	webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
-	ip=open('/tmp/ip','r').read().strip()
-	print u'proxy ip:{}'.format(ip)
-	service_args = ['--proxy=proxy:8128','--proxy-type=https']
-	#service_args = ['--proxy=proxy:8088','--proxy-type=socks5']
-	driver = webdriver.PhantomJS(service_args=service_args)
-	#driver = webdriver.PhantomJS()
-	driver.implicitly_wait(5)
-	driver.set_page_load_timeout(5)
-    #driver = webdriver.PhantomJS()
-	print u'start parse {}'.format(ttzb)
-	try:
-		driver.get('http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb))
-		print driver.page_source
-		frames=driver.find_elements(By.ID,'iframepage')
-		if len(frames)<=0:
-			return ''
-		driver.get(frames[0].get_attribute('src'))
-		src=driver.find_element_by_id('ckplayer_player').get_attribute('src')
-		return src
-	except TimeoutException as e:
-		print e
-		#get_stream(ttzb)
-	finally:
-		driver.service.process.send_signal(signal.SIGTERM)
-		driver.quit()
+#def get_stream(ttzb):
+#	webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
+#	ip=open('/tmp/ip','r').read().strip()
+#	print u'proxy ip:{}'.format(ip)
+#	service_args = ['--proxy=proxy:8128','--proxy-type=https']
+#	#service_args = ['--proxy=proxy:8088','--proxy-type=socks5']
+#	driver = webdriver.PhantomJS(service_args=service_args)
+#	#driver = webdriver.PhantomJS()
+#	driver.implicitly_wait(5)
+#	driver.set_page_load_timeout(5)
+#    #driver = webdriver.PhantomJS()
+#	print u'start parse {}'.format(ttzb)
+#	try:
+#		driver.get('http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb))
+#		print driver.page_source
+#		frames=driver.find_elements(By.ID,'iframepage')
+#		if len(frames)<=0:
+#			return ''
+#		driver.get(frames[0].get_attribute('src'))
+#		src=driver.find_element_by_id('ckplayer_player').get_attribute('src')
+#		return src
+#	except TimeoutException as e:
+#		print e
+#		#get_stream(ttzb)
+#	finally:
+#		driver.service.process.send_signal(signal.SIGTERM)
+#		driver.quit()
 
 #def get_stream(ttzb):
 #	dryscrape.start_xvfb()
@@ -74,9 +78,41 @@ def get_stream(ttzb):
 #		if video:return video['src']
 #	server.kill()
 	
-	
-	
-	
+def get_stream(ttzb):
+    res = requests.get('http://m.tiantianzhibo.com/api/signallist.php?ch=ttzb1', headers=headers)
+    # print res.text
+    j = json.loads(res.text)
+    print j['key']
+    r = requests.get(u'http://m.tiantianzhibo.com/player.html?ch=ttzb1&p=dn&v=564&k={}&w=375&h=251'.format(j['key']))
+    soup = BeautifulSoup(r.text)
+    s = soup.findAll('script')
+    script = s[1].text
+    js = script[:5] + 'console.log(' + script[5:] + ')'
+    tmp_file = str(round(time.time()) * 1000) + '.js'
+    with open(tmp_file, 'w') as f:
+        f.write(js)
+    try:
+        output = subprocess.check_output("node aaa.js", shell=True, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    try:
+        os.remove(tmp_file)
+    except OSError:
+        pass
+    tmp_file = str(round(time.time() * 1000)) + '.js'
+    with open(tmp_file, 'w') as f:
+        f.write(str(output).split('function ckcpt()')[0] + 'console.log(play_url)')
+    try:
+        output = subprocess.check_output("node bbb.js", shell=True, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    try:
+        os.remove(tmp_file)
+    except OSError:
+        pass
+    print output
+
+
 
 def add_channel(channel_name):
     channel_found=Channel.objects(channel_name=channel_name)
