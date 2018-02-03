@@ -9,6 +9,9 @@ from selenium.webdriver.common.by import By
 import os
 import signal
 from selenium.common.exceptions import TimeoutException
+import dryscrape
+from bs4 import BeautifulSoup
+import webkit_server
 
 ip=''
 with open('/tmp/ip','r') as f:ip=f.read().strip()
@@ -29,13 +32,17 @@ def get_stream(ttzb):
 	webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
 	ip=open('/tmp/ip','r').read().strip()
 	print u'proxy ip:{}'.format(ip)
-	service_args = ['--proxy=proxy:8128','--proxy-type=https',]
+	service_args = ['--proxy=proxy:8128','--proxy-type=https']
+	#service_args = ['--proxy=proxy:8088','--proxy-type=socks5']
 	driver = webdriver.PhantomJS(service_args=service_args)
-	driver.implicitly_wait(30)
-	driver.set_page_load_timeout(30)
+	#driver = webdriver.PhantomJS()
+	driver.implicitly_wait(5)
+	driver.set_page_load_timeout(5)
     #driver = webdriver.PhantomJS()
+	print u'start parse {}'.format(ttzb)
 	try:
 		driver.get('http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb))
+		print driver.page_source
 		frames=driver.find_elements(By.ID,'iframepage')
 		if len(frames)<=0:
 			return ''
@@ -48,6 +55,28 @@ def get_stream(ttzb):
 	finally:
 		driver.service.process.send_signal(signal.SIGTERM)
 		driver.quit()
+
+#def get_stream(ttzb):
+#	dryscrape.start_xvfb()
+#	server = webkit_server.Server()
+#	server_conn = webkit_server.ServerConnection(server=server)
+#	driver = dryscrape.driver.webkit.Driver(connection=server_conn)
+#	session=dryscrape.Session(driver=driver)
+#	session.set_header('user-agent','Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36')
+#	session.set_proxy('proxy',8128)
+#	session.visit('http://m.tiantianzhibo.com/channel/{}.html'.format(ttzb))
+#	soup=BeautifulSoup(session.body())
+#	iframe=soup.find('iframe',{'id':'iframepage'})
+#	if iframe:
+#		session.visit(iframe['src'])
+#		soup=BeautifulSoup(session.body())
+#		video=soup.find('video')
+#		if video:return video['src']
+#	server.kill()
+	
+	
+	
+	
 
 def add_channel(channel_name):
     channel_found=Channel.objects(channel_name=channel_name)
@@ -65,7 +94,7 @@ def add_channel(channel_name):
 
 def refresh_all():
     #change_ip()
-    channels=Channel.objects(c_from='ttzb')
+    channels=Channel.objects(c_from='ttzb').order_by('u_time','+a')
     for channel in channels:
         refresh(channel)
 
@@ -79,3 +108,4 @@ def refresh(channel):
 if __name__=='__main__':
     #start_requests()
     refresh_all()
+	#print get_stream('ttzb2')

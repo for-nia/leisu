@@ -11,6 +11,7 @@ from datetime import datetime,timedelta
 from flask_cors import CORS
 import re
 from common.items.Match import Match,Channel
+import os
 
 app=Flask(__name__,static_folder='static')
 CORS(app)
@@ -138,6 +139,20 @@ def start_requests():
             if m:
                 match.update(ttzb=m[0])
     return jsonify(code=0,result='ok')
+@app.route('/sync_ip')
+def sync_ip():
+	ps=open('/home/admin/sudo_ps','r').read().strip()
+	if request.headers.getlist("X-Forwarded-For"):
+		ip = request.headers.getlist("X-Forwarded-For")[0]
+	else:
+		ip = request.remote_addr
+	#ip = request.remote_addr
+	with open('/tmp/ip', 'w') as f:
+		f.write(ip)
+		f.close()
+	command=u"sed -i -e 's/.* proxy/{} proxy/' /etc/hosts".format(ip)
+	os.system(u'echo {}|sudo -S {}'.format(ps, command))
+	return jsonify(code=0,result='ok',ip=ip)
 
 def run(port=8989):
     app.run('0.0.0.0',port,threaded=True)
