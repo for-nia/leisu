@@ -26,6 +26,7 @@ def parse_stream(url):
     headers['Referer']=url
     r=requests.get(url,headers=headers)
     data=json.loads(r.text)
+    print r.text
     if 'url' in data:
         url = data['url']
         if 'pc' in url:
@@ -56,5 +57,5 @@ def get_stream_id(url):
         return matcher.group(1)
 
 if __name__=='__main__':
-    get_html()
-    #print get_stream_id('http://live.leisu.com/stream-2292731')
+    #get_html()
+    print parse_stream(u'http://api.leisu.com/api/livestream?sid={}&type=1'.format(2226817))

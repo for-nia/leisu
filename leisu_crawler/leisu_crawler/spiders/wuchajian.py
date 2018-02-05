@@ -8,6 +8,7 @@ from datetime import datetime
 from leisu_crawler.tools import ttzb
 from leisu_crawler.tools import qqlive
 from datetime import datetime,timedelta
+import requests
 
 head = {u'老鹰': 'http://china.nba.com/media/img/teams/logos/ATL_logo.svg',
         u'凯尔特人': 'http://china.nba.com/media/img/teams/logos/BOS_logo.svg',
@@ -116,6 +117,9 @@ class Wuchajian(scrapy.Spider):
                 channel_name = 'cctv52JRS'
             elif 'cctv5' in link:
                 channel_name = 'cctv5dd2'
+            elif u'zhibotv' in link:
+                m = re.findall(r'zhibotv-\d+',link)
+                channel_name = m[0]
 
             if channel_name:
                 if channel_name in match.channels:
@@ -130,6 +134,7 @@ class Wuchajian(scrapy.Spider):
         if len(channels) > 0:
             return
         self.add_channel(channel_name)
+        #requests.get('http://localhost:8989/add_channel?channel_name='+channel_name)
 
     def add_channel(self, channel_name):
         if 'ttzb' in channel_name:

@@ -12,6 +12,9 @@ from flask_cors import CORS
 import re
 from common.items.Match import Match,Channel
 import os
+import leisu_api.job.qqlive as qqlive
+import leisu_api.job.ttzb as ttzb
+import leisu_api.job.zhibotv as zhibotv
 
 app=Flask(__name__,static_folder='static')
 CORS(app)
@@ -153,6 +156,16 @@ def sync_ip():
 	command=u"sed -i -e 's/.* proxy/{} proxy/' /etc/hosts".format(ip)
 	os.system(u'echo {}|sudo -S {}'.format(ps, command))
 	return jsonify(code=0,result='ok',ip=ip)
+
+@app.route('add_channel')
+def add_channel():
+    channel_name=request.args.get('channnel_name')
+    if 'ttzb' in channel_name:
+        ttzb.add_channel(channel_name)
+    elif 'zhibotv' in channel_name:
+        zhibotv.add_channel(channel_name)
+    elif 'qqlive' in channel_name:
+        qqlive.add_channel(channel_name)
 
 def run(port=8989):
     app.run('0.0.0.0',port,threaded=True)
