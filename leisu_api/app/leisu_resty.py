@@ -91,10 +91,10 @@ def player():
     for c in match.channels:
         print c
     print match.flv
-    if match.flv:
-        print match.flv
-        return render_template('player.html',match=match)
-    else:
+    #if match.flv:
+    #   print match.flv
+    #    return render_template('player.html',match=match)
+    if True:
         channel_name=request.args.get('channel')
         print channel_name
         channels=Channel.objects(channel_name__in=match.channels)

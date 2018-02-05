@@ -105,12 +105,12 @@
         variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
         autoplay: true,//自动播放
         live: true,
-        {% if match.flv %}
-            video: '{{ match.flv|safe }}'//视频地址
-        {% elif channel %}
+        {% if channel %}
             video: '{{ channel.pc_stream|safe }}'
         {% elif channels %}
             video: '{{ channels[0].pc_stream|safe }}'//视频地址
+        {% elif match.flv %}
+            video: '{{ match.flv|safe }}'//视频地址
         {% else %}
             video: 'http://cg01.hrtn.net:9090/live/cctv5_1500.m3u8'//视频地址
         {% endif %}

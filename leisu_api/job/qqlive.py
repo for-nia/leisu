@@ -46,7 +46,7 @@ def get_by_channel_name(name):
 	#res=requests.get(u'http://w.zhibo.me:8088/{}.php'.format(name),headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
 	url=u'http://w.zhibo.me:8088/{}.php'.format(name)
 	print url
-	res=session.get(url,headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
+	res=session.get(url,headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'},timeout=30)
 	text=res.text
 	print text.encode('utf-8')
 	m_video=re.compile(r'<video .*?<\/video>').findall(text)
@@ -84,9 +84,12 @@ def add_channel(channel_name):
 
 def refresh_all():
     #change_ip()
-    channels=Channel.objects(c_from='qqlive')
-    for channel in channels:
-        refresh(channel)
+	channels=Channel.objects(c_from='qqlive').order_by('u_time','+a')
+	for channel in channels:
+		try:
+			refresh(channel)
+		except:
+			pass
 
 def refresh(channel):
     channel_name=channel.channel_name

@@ -97,12 +97,12 @@ def get_stream(ttzb):
     headers['Referer'] = u'http://m.tiantianzhibo.com/channel/ttzb1.html'.format(ttzb)
     session = requests.Session()
     session.proxies = {'http': 'http://proxy:8128', 'https': 'http://proxy:8128'}
-    res = session.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers)
+    res = session.get('http://m.tiantianzhibo.com/api/signallist.php?ch={}'.format(ttzb), headers=headers,timeout=3)
     print res.text
     j = json.loads(res.text)
     print j['key']
-    r = session.get(u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v={}&k={}&w=375&h=251'.format(ttzb,j['default'][0],j['key']))
-    print r.text
+    r = session.get(u'http://m.tiantianzhibo.com/player.html?ch={}&p=dn&v={}&k={}&w=375&h=251'.format(ttzb,j['default'][0],j['key']),timeout=30)
+    #print r.text
     soup = BeautifulSoup(r.text)
     s = soup.findAll('script')
     script = s[1].text
@@ -129,7 +129,7 @@ def get_stream(ttzb):
         os.remove(tmp_file)
     except OSError:
         pass
-    return output
+    return output.rstrip()
 
 
 def add_channel(channel_name):
@@ -150,7 +150,10 @@ def refresh_all():
     #change_ip()
     channels=Channel.objects(c_from='ttzb').order_by('u_time','+a')
     for channel in channels:
-        refresh(channel)
+		try:
+			refresh(channel)
+		except:
+			pass
 
 def refresh(channel):
     pc_stream=get_stream(channel.channel_name)

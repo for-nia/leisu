@@ -8,7 +8,14 @@ import urlparse
 import sys
 from leisu_crawler.items.Match import Channel
 import os
+import requests
+import re
+from bs4 import BeautifulSoup
+from datetime import datetime
+
 service_args = ['--proxy=127.0.0.1:9050','--proxy-type=socks5',]
+ip=''
+with open('/tmp/ip','r') as f:ip=f.read().strip()
 
 def change_ip():
     os.system("""(echo authenticate '"hi@tor"'; echo signal newnym; echo \
@@ -16,21 +23,41 @@ def change_ip():
 
 def get_url(num):
     return get_by_channel_name(u'qqliveHD{}'.format(num))
+#def get_by_channel_name(name):
+#    webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
+#    webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.referer']='http://www.zuqiu.me/tv/qqlive41.html'
+#    driver = webdriver.PhantomJS(service_args=service_args)
+#    print u'refresh channel name:{}'.format(name)
+#    driver.get('http://w.zhibo.me:8088/{}.php'.format(name))
+#    print driver.page_source
+#    frames=driver.find_elements(By.TAG_NAME,'iframe')
+#    print frames
+#    videos=driver.find_elements(By.TAG_NAME,'video')
+#    print videos
+#    url = videos[0].get_attribute('src') if len(videos)>0 else frames[0].get_attribute('src') if len(frames)>0 else ''
+#    if len(frames)>0:
+#        url = get_stream(url)
+#    return url
+
 def get_by_channel_name(name):
-    webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.settings.userAgent']='Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
-    webdriver.DesiredCapabilities.PHANTOMJS['phantomjs.page.customHeaders.referer']='http://www.zuqiu.me/tv/qqlive41.html'
-    driver = webdriver.PhantomJS(service_args=service_args)
-    #change_ip()
-    driver.get('http://w.zhibo.me:8088/{}.php'.format(name))
-    print driver.page_source
-    frames=driver.find_elements(By.TAG_NAME,'iframe')
-    print frames
-    videos=driver.find_elements(By.TAG_NAME,'video')
-    print videos
-    url = videos[0].get_attribute('src') if len(videos)>0 else frames[0].get_attribute('src') if len(frames)>0 else ''
-    if len(frames)>0:
-        url = get_stream(url)
-    return url
+	session=requests.Session()
+	session.proxies={'http':'http://proxy:8128','https':'http://proxy:8128'}
+    #r = session.get(url)
+	#res=requests.get(u'http://w.zhibo.me:8088/{}.php'.format(name),headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'})
+	url=u'http://w.zhibo.me:8088/{}.php'.format(name)
+	print url
+	res=session.get(url,headers={'referer':'http://www.zuqiu.me/tv/qqlive41.html'},timeout=30)
+	text=res.text
+	print text.encode('utf-8')
+	m_video=re.compile(r'<video .*?<\/video>').findall(text)
+	m_iframe=re.compile(r'<iframe .*</iframe>').findall(text)
+	if m_video:
+		soup=BeautifulSoup(m_video[0])
+		return soup.findAll('video')[0]['src']
+	elif m_iframe:
+		soup=BeautifulSoup(m_iframe[0])
+		src=soup.findAll('iframe')[0]['src']
+		return get_stream(src)
 
 
 def get_stream(url):
@@ -52,26 +79,34 @@ def add_channel(channel_name):
     channel.c_from='qqlive'
     channel.type='m3u8'
     channel.name=u'QQ直播'+channel_name[6:]
+    channel.u_time=datetime.now()
     channel.save()
 
 def refresh_all():
-    channels=Channel.objects(c_from='qqlive')
-    for channel in channels:
-        refresh(channel)
+    #change_ip()
+	channels=Channel.objects(c_from='qqlive').order_by('u_time','+a')
+	for channel in channels:
+		try:
+			refresh(channel)
+		except:
+			pass
 
 def refresh(channel):
+    channel_name=channel.channel_name
     if u'qqlive' in channel_name:
         pc_stream=get_url(channel_name[6:])
     else:
         pc_stream=get_by_channel_name(channel_name)
+    print channel_name
     print pc_stream
-    m_stream=pc_stream
-    channel.update(pc_stream=pc_stream,m_stream=m_stream)
+    if pc_stream:
+        m_stream=pc_stream
+        channel.update(pc_stream=pc_stream,m_stream=m_stream,u_time=datetime.now())
 
 if __name__=='__main__':
     num=1
     if len(sys.argv)>1:
-        num=sys.argv[1]
-	print get_url(num)
+		num=sys.argv[1]
+		print get_url(num)
     else:
         refresh_all()

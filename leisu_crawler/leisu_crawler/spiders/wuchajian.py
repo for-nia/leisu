@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 from leisu_crawler.tools import ttzb
 from leisu_crawler.tools import qqlive
+from datetime import datetime,timedelta
 
 head = {u'老鹰': 'http://china.nba.com/media/img/teams/logos/ATL_logo.svg',
         u'凯尔特人': 'http://china.nba.com/media/img/teams/logos/BOS_logo.svg',
@@ -89,7 +90,7 @@ class Wuchajian(scrapy.Spider):
 
     def find_ls_match(self, match):
         # print match.away_name+'+++'+match.home_name
-        matches = Match.objects(begin_time=match.begin_time)
+        matches = Match.objects(begin_time__gt=match.begin_time-timedelta(minutes=5),begin_time__lt=match.begin_time+timedelta(minutes=5))
         if len(matches) <= 0: return
         for m_ls in matches:
             if match.home_name == m_ls.home_name or match.home_name == m_ls.away_name or match.away_name == m_ls.home_name or match.away_name == m_ls.away_name:
