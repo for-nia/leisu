@@ -94,7 +94,7 @@ class Wuchajian(scrapy.Spider):
         matches = Match.objects(begin_time__gt=match.begin_time-timedelta(minutes=5),begin_time__lt=match.begin_time+timedelta(minutes=5))
         if len(matches) <= 0: return
         for m_ls in matches:
-            if match.home_name == m_ls.home_name or match.home_name == m_ls.away_name or match.away_name == m_ls.home_name or match.away_name == m_ls.away_name:
+            if match.home_name in m_ls.home_name+m_ls.away_name or match.away_name in m_ls.away_name+m_ls.home_name or m_ls.away_name in match.home_name+match.away_name or m_ls.home_name in match.away_name+match.home_name:
                 print 'matched'
                 print match.away_name.encode('utf-8') + ' vs ' + match.home_name.encode('utf-8')
                 m_ls.update(wcj_id=str(match.match_id), stream=1, upsert=True)
@@ -120,6 +120,9 @@ class Wuchajian(scrapy.Spider):
             elif u'zhibotv' in link:
                 m = re.findall(r'zhibotv-\d+',link)
                 channel_name = m[0]
+            elif u'qietv' in link:
+                m = re.findall(r'qietv-\d+',link)
+                channel_name = m[0]
 
             if channel_name:
                 if channel_name in match.channels:
@@ -133,8 +136,8 @@ class Wuchajian(scrapy.Spider):
         channels = Channel.objects(channel_name=channel_name)
         if len(channels) > 0:
             return
-        self.add_channel(channel_name)
-        #requests.get('http://localhost:8989/add_channel?channel_name='+channel_name)
+        #self.add_channel(channel_name)
+        requests.get('http://localhost:8989/add_channel?channel_name='+channel_name)
 
     def add_channel(self, channel_name):
         if 'ttzb' in channel_name:

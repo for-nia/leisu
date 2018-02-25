@@ -15,6 +15,7 @@ import os
 import leisu_api.job.qqlive as qqlive
 import leisu_api.job.ttzb as ttzb
 import leisu_api.job.zhibotv as zhibotv
+import leisu_api.job.qietv as qietv
 
 app=Flask(__name__,static_folder='static')
 CORS(app)
@@ -157,15 +158,19 @@ def sync_ip():
 	os.system(u'echo {}|sudo -S {}'.format(ps, command))
 	return jsonify(code=0,result='ok',ip=ip)
 
-@app.route('add_channel')
+@app.route('/add_channel')
 def add_channel():
-    channel_name=request.args.get('channnel_name')
+    channel_name=request.args.get('channel_name')
+    print channel_name
     if 'ttzb' in channel_name:
         ttzb.add_channel(channel_name)
     elif 'zhibotv' in channel_name:
         zhibotv.add_channel(channel_name)
-    elif 'qqlive' in channel_name:
+    elif 'qietv' in channel_name:
+        qietv.add_channel(channel_name)
+    else:
         qqlive.add_channel(channel_name)
+    return jsonify(code=0,result='ok')
 
 def run(port=8989):
     app.run('0.0.0.0',port,threaded=True)

@@ -2,7 +2,6 @@
 
 import sys
 sys.path.append('..')
-
 from common.items.Match import Channel
 from datetime import datetime
 import requests
@@ -39,15 +38,14 @@ def add_channel(channel_name):
     if channel_found:
         return
     channel=Channel()
-    channel.pc_stream=get_stream(channel_name)
+    channel.pc_stream=get_stream(channel_name[8:])
     channel.m_stream=channel.pc_stream
     channel.channel_name=channel_name
     channel.c_from='zhibotv'
     channel.type='m3u8'
-    channel.name=u'体育直播'+channel_name[4:]
+    channel.name=u'体育直播'+channel_name[7:]
     channel.u_time=datetime.now()
     channel.save()
 
-o
 if __name__=='__main__':
-    print get_stream(31293051)
+    print get_stream(30241768)

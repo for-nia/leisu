@@ -63,7 +63,7 @@ def get_by_channel_name(name):
 def get_stream(url):
     #parsed=urlparse.urlparse(url)
     #return urlparse.parse_qs(parsed.query)['id'][0]
-    return url.split('?id=')[1]
+    return u''.join(url.split('?id=')[1:])
 
 def add_channel(channel_name):
     channel_found=Channel.objects(channel_name=channel_name)

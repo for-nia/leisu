@@ -9,7 +9,7 @@ from job import ttzb
 
 
 def start_requests():
-    matches=Match.objects(m_from='leisu',begin_time__lt=datetime.now(),begin_time__gt=datetime.now()-timedelta(hours=3),stream=1,status=1)
+    matches=Match.objects(m_from='leisu',begin_time__lt=datetime.now()+timedelta(minutes=10),begin_time__gt=datetime.now()-timedelta(hours=3),stream=1,status=1)
     for match in matches:
         print match.home_name.encode('utf-8')
         url= parse_stream('http://api.leisu.com/api/livestream?sid=%s&type=1' % match.match_id)
@@ -19,8 +19,11 @@ def start_requests():
         m=p.findall(url)
         if m:
             num=m[0]
-            match.update(channels=['ttzb'+num])
-            ttzb.add_channel('ttzb'+str(num))
+            line=u'ttzb{}'.format(num)
+            if not line in match.channels:
+                match.channels.append(line)
+                match.update(channels=match.channels)
+                ttzb.add_channel('ttzb'+str(num))
         elif 'flv' in url:
             match.update(flv=url)
 
